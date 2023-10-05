@@ -38,7 +38,7 @@ int main()
     }
 
     /* sum of squares */
-    xsquared = x*x;
+    xsquared = x*x; /*since C doesn't have a built in power operator, multiplying manually is needed to perform power operations.*/
     ysquared = y*y;
     squaresum = xsquared + ysquared;
     printf("squaresum = %f", squaresum);

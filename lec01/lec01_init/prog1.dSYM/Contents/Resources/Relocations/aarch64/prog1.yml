@@ -1,7 +1,7 @@
 ---
 triple:          'arm64-apple-darwin'
-binary-path:     '/Users/max/Library/CloudStorage/GoogleDrive-fernaldy.maximilian.p4@dc.tohoku.ac.jp/My Drive/sem3/pip/lec01/lec01_init/prog1'
+binary-path:     '/Users/max/Documents/GitHub/pip/lec01/lec01_init/prog1'
 relocations:
-  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003DB8, symSize: 0x158 }
-  - { offsetInCU: 0x48, offset: 0x48, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003DB8, symSize: 0x158 }
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003D5C, symSize: 0x1A4 }
+  - { offsetInCU: 0x48, offset: 0x48, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003D5C, symSize: 0x1A4 }
 ...
