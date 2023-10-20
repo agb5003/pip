@@ -1,6 +1,6 @@
 /*
  matrix_multiple.c
- */
+*/
 
 #include <stdio.h>
 
