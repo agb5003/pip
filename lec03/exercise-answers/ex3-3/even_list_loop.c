@@ -7,4 +7,5 @@ int main () {
         printf("Enter a positive integer: ");
         scanf("%d", &i);
     }
+    return 0;
 }

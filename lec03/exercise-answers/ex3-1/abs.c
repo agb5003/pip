@@ -1,13 +1,11 @@
 #include <stdio.h>
 
 int main() {
-    int n = 0;
-    printf("Enter the number you would like the absolute value of:");
-    scanf("%d", &n);
-    if (n < 0) {
-        printf("%d\n", -n);
-    } else {
-        printf("%d\n", n);
+    float n = 0;
+    printf("Enter the number you would like the absolute value of: ");
+    scanf("%f", &n);
+    if (n < 0) { // if n is negative, reverse the sign
+        n = -n;
     }
+    printf("%f\n", n);
 }
-

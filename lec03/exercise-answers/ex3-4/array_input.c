@@ -16,4 +16,6 @@ int main() {
         printf("arr[%d] = %d\n", i, arr[i]);
     }
     printf("Sum is %d\n", sum);
+
+    return 0;
 }
