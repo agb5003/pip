@@ -10,7 +10,8 @@ int main() {
     printf("Enter string (1000 character limit): ");
     fgets(string, sizeof(string), stdin);
     // NOTE: this fgets also gets newline character from pressing enter.
-    // To remove this trailing newline, we use strcspn() function to index the string and remove the newline.
+    // To remove this trailing newline, we use strcspn() function to
+    // index the string and remove the newline.
     string[strcspn(string, "\n")] = 0;
 
     reverse(string);

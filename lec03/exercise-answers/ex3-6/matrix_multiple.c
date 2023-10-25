@@ -1,7 +1,3 @@
-/*
- matrix_multiple.c
- */
-
 #include <stdio.h>
 
 int main()
@@ -36,16 +32,13 @@ int main()
     // Visual
     printf("Visual view:\n");
     for (int i = 0; i < 4; i++) {
-        printf("| ");
+        printf("| "); // Left boundary
         for (int j = 0; j < 4; j++) {
-            printf(" %d ", C[i][j]);
+            printf(" %d ", C[i][j]); // print entry
         }
-        printf(" |\n");
+        printf(" |\n"); // Right boundary, then insert newline for new row
     }
 
     return 0;
     
 }
-
-
-
