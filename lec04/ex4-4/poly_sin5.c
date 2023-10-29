@@ -5,13 +5,13 @@ calculation of polynomials poly.c
 #include <stdio.h>
 #include <math.h>
 
-#define N  4
+#define N  6
 
 int main()
 {
     /**** (1) variable declaration ****/
     /* set coefficients */
-    double	c[N] = {0, 1, 0, -1/6};
+    double	c[N] = {sin(0), cos(0)/1, -sin(0)/2, -cos(0)/6, sin(0)/24, cos(0)/120};
     
     double	x, y;
     int	i ;
