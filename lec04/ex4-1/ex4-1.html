@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head>
-      <title>exp2-1</title>
+      <title>ex4-1</title>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
@@ -24,39 +24,65 @@
     
       <div class="crossnote markdown-preview  ">
       
-<h1 id="exercise-21-scanf">Exercise 2.1: scanf </h1>
-<p align="center"> <img src="./resources/ex2-1.png" width="500"> </p>
-<p>key_input.c receives 2 integers and prints them out. In order to support decimal numbers, we cannot use the type <code>int</code> because it will truncate the decimals off of the numbers we input. In order to retain the decimals, we need to change the type to <code>float</code> or <code>double</code>. We also need to change the format specifiers from <code>%d</code> to <code>%f</code> when printing the numbers so that it fits the type of our variable, which is <code>float</code>.</p>
-<p>Putting all this together, we rewrite the program as such:</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<h1 id="exercise-4-1-sort_bubblec">Exercise 4-1: sort_bubble.c </h1>
+<p>Maximilian Fernaldy - C2TB1702</p>
+<p align="center"> <img src="./ex4-1.png" width="500"> </p>
+<p>To visualize the comparisons, we need to modify the <code>j</code> level <code>for</code> loop of the program to print the current condition of the array for each comparison ran. An asterisk should be printed whenever our <code>for</code> loop encounters the element which is currently being referenced. Since the reference element is always compared to the element right next to it, we can just use <code>j+1</code> for its index. Then, if the <code>for</code> loop encounters the <code>j+1</code>-th element, it should print a "&gt;" before printing the value of the element.</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> NUM<span class="token operator">-</span>i<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    comparisons<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[%d][%d] "</span><span class="token punctuation">,</span> comparisons<span class="token punctuation">,</span> swaps<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Display the number of comparisons and swaps done</span>
+    <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> k <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> k <span class="token operator">&lt;</span> NUM<span class="token punctuation">;</span> k<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>k <span class="token operator">==</span> j<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"*%d "</span><span class="token punctuation">,</span> A<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword keyword-else">else</span> <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>k <span class="token operator">==</span> j <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"&gt;%d "</span><span class="token punctuation">,</span> A<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword keyword-else">else</span> <span class="token punctuation">{</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d "</span><span class="token punctuation">,</span> A<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        
+        <span class="token comment">// Insert new line if k reaches the end of the array</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>k <span class="token operator">==</span> NUM <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token comment">// If compared number is smaller than reference number, swap them</span>
+    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>A<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">&gt;</span> A<span class="token punctuation">[</span>j<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        temp <span class="token operator">=</span> A<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        A<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> A<span class="token punctuation">[</span>j<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        A<span class="token punctuation">[</span>j<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> temp<span class="token punctuation">;</span>
 
-<span class="token keyword keyword-int">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    
-    <span class="token comment">/**** variable declaration ****/</span>
-    <span class="token keyword keyword-float">float</span> x<span class="token punctuation">,</span> y<span class="token punctuation">;</span>           <span class="token comment">/* integer type */</span>
-    
-    <span class="token comment">/**** processing contents ****/</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Input two numbers: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    
-    <span class="token comment">/* Get keyboard input */</span>
-    <span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%f %f"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>x<span class="token punctuation">,</span> <span class="token operator">&amp;</span>y<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token comment">/* display getting value */</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"x=%f\n"</span><span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"y=%f\n"</span><span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    
-    <span class="token keyword keyword-return">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        swaps<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre><p>Running the compiled program in the terminal produces this output:</p>
-<p align="center"> <img src="./resources/output-keyinput.png" width="500"> </p>
+</code></pre><p>To print the array, we add a lower level <code>for</code> loop with iterator <code>k</code>, which goes from 0 to <code>NUM-1</code> to print the elements one by one, terminating before it reaches <code>NUM</code>. When <code>k</code> is equal to <code>j</code>, that means the program is trying to print the element on the array that is being referenced, so it should print an asterisk before the integer. When <code>k</code> is equal to <code>j+1</code>, the program is trying to print the element it is being compared to, so it should print an exclamation mark before the integer.</p>
+<p>Here, it's not critical to use <code>else if</code> instead of <code>if</code>, because an element cannot be indexed by <code>j</code> and <code>j+1</code> at the same time. However, it is still good practice to use <code>else if</code> so that the program can skip over this condition if it has already executed the block above it (which is <code>if (k == j)</code>)</p>
+<p>To count the number of comparisons and replacements made by the program, integers <code>comparisons</code> and <code>swaps</code> are initialized as 0, and every time a new comparison is made (the beginning of the <code>j</code> level <code>for</code> loop), <code>comparisons</code> is increased by 1:</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> NUM<span class="token operator">-</span>i<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    comparisons<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre><p>similarly, we modify the code that swaps the numbers to increment <code>swaps</code> by 1 to keep track of how many swaps has been made:</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>A<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">&gt;</span> A<span class="token punctuation">[</span>j<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    temp <span class="token operator">=</span> A<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    A<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> A<span class="token punctuation">[</span>j<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    A<span class="token punctuation">[</span>j<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> temp<span class="token punctuation">;</span>
+
+    swaps<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><p>Compiling and running the program gives the following output:</p>
+<p align="center"> <img src="./output-bubble1.png" width="500"> </p>
 <style>
-  figcaption{
+    figcaption{
     text-align:center;
-    font-size:9pt
-  }
-  img{
-    filter: drop-shadow(0px 0px 7px );
-  }
+        font-size:9pt
+    }
+    img{
+        filter: drop-shadow(0px 0px 7px );
+    }
+    .noshade{
+        filter: none
+    }
 </style>
 
       </div>

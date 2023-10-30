@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head>
-      <title>exp2-4</title>
+      <title>ex4-3</title>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
@@ -24,61 +24,76 @@
     
       <div class="crossnote markdown-preview  ">
       
-<h1 id="exercise-2-4-practice-of-for-statement">Exercise 2-4: Practice of <code>for</code> statement </h1>
-<p align="center"> <img src="./resources/ex2-4.png" width="500"> </p>
-<h2 id="loop01c">loop01.c </h2>
-<p>Exercise 2-4 demonstrates the simple applications of the <code>for</code> statement. First, we are tasked to calculate the sum of whole numbers from 1 to 100 and display the result. Although this seems easy enough at first glance, the logic might be a little harder.</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<h1 id="exercise-4-3-selection-sort-sort_selectc">Exercise 4-3: Selection Sort (sort_select.c) </h1>
+<p>Maximilian Fernaldy - C2TB1702</p>
+<p align="center"> <img src="./ex4-3.png" width="500"> </p>
+<p>The principle of selection sort is to find the <code>i</code>-th smallest element and swap it with the <code>i</code>-th element in the array. For example, the first "selection" will look for the smallest element in the whole array, and place it in index <code>0</code>. The second selection will look for the second smallest element and place it in index <code>1</code>. This goes on until it reaches the last 2 numbers and swaps them if they're not already in the right order.</p>
+<p>To program the selection sort, we initialize <code>i</code> to start from 0 and <code>j</code> to start at <code>i+1</code> (because we don't need to compare the <code>i</code>-th element with itself).</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> NUM<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-int">int</span> smallest_index <span class="token operator">=</span> i<span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Search %d:\n"</span><span class="token punctuation">,</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token keyword keyword-int">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-    <span class="token comment">/**** variable declaration ****/</span>
-    <span class="token keyword keyword-int">int</span> i<span class="token punctuation">,</span>sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    
-    <span class="token comment">/**** processing contents ****/</span>
-    <span class="token keyword keyword-for">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span><span class="token number">100</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        sum <span class="token operator">+=</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> NUM<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
     <span class="token punctuation">}</span>
-    
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"The sum is %d\n"</span><span class="token punctuation">,</span> sum<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    
-    <span class="token keyword keyword-return">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
-</code></pre><p>If we only do <code>sum += i</code>, the program will start adding from the initial value of <code>i</code>, which is 0. Since we want to do <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>+</mo><mn>2</mn><mo>+</mo><mo>…</mo><mo>+</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">1+2+\ldots+100</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">100</span></span></span></span>, we need to start from 1. To do this, we offset the addition into <code>sum</code> by doing <code>sum += 1</code>, so that it starts by adding 1 into <code>sum</code> when <code>i=0</code>, adding 2 into <code>sum</code> when <code>i=1</code>, and so on until it adds 100 into <code>sum</code> when <code>i=99</code>. Compiling and running the program yields:</p>
-<p align="center"> <img class="noshade" src="./resources/output-loop01.png" width="500"> </p>
-<h2 id="loop02c">loop02.c </h2>
-<p>Next we are tasked to calculate the sum of numbers that are multiples of 3 from 1 to 1000 and display the result. There are many ways to do this, for example, the most intuitive way after reading the problem statement is probably by iterating through all the numbers from 1 to 1000, check if it's divisible by 3, and if it is, add it to the sum. However, this method requires us to run the <code>if</code> condition a thousand times. While C is incredibly fast, it is bad programming practice to rely on many logical processing when avoidable.</p>
-<p>Another way to do this is actually simpler. We can use the <code>for</code> loop to work for us.</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
-
-<span class="token keyword keyword-int">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-    <span class="token comment">/**** variable declaration ****/</span>
-    <span class="token keyword keyword-int">int</span> i<span class="token punctuation">,</span>sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    
-    <span class="token comment">/**** processing contents ****/</span>
-    <span class="token keyword keyword-for">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">;</span>i<span class="token operator">&lt;=</span><span class="token number">1000</span><span class="token punctuation">;</span>i<span class="token operator">+=</span><span class="token number">3</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        sum <span class="token operator">+=</span> i<span class="token punctuation">;</span>
+</code></pre><p>we also need to initialize <code>smallest_index</code> so that the program can remember the smallest number in each selection process. This can start at <code>i</code> for each selection, and we will change it later accordingly within the <code>j</code> level <code>for</code> loop.</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> NUM<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    comparisons<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[%d][%d] "</span><span class="token punctuation">,</span> comparisons<span class="token punctuation">,</span> swaps<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> k <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> k <span class="token operator">&lt;</span> NUM<span class="token punctuation">;</span> k<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>k <span class="token operator">==</span> i<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// Element to replace</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword keyword-else">else</span> <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>k <span class="token operator">==</span> j<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// Compared element</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>k <span class="token operator">==</span> smallest_index <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d "</span><span class="token punctuation">,</span> A<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// Insert new line if k reaches the end of the array</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>k <span class="token operator">==</span> NUM <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
-    
-    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"The sum is %d\n"</span><span class="token punctuation">,</span> sum<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    
-    <span class="token keyword keyword-return">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment">// If compared number is smaller than current smallest number,</span>
+    <span class="token comment">// make it the new smallest</span>
+    <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>A<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">&lt;</span> A<span class="token punctuation">[</span>smallest_index<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        smallest_index <span class="token operator">=</span> j<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre><p>Instead of starting at 1 intuitively, since we know that 1 is not a multiple of 3, we can start at 3 and add 3 to <code>i</code> after each iteration. Compiling and running the code yields:</p>
-<p align="center"> <img class="noshade" src="./resources/output-loop02.png" width="500"> </p>
+</code></pre><p>As for the <code>j</code> level <code>for</code> loop itself, we first increment <code>searches</code> by 1 at the start of each iteration, so that we can track how many searches are made in total. Then we display the current amount of searches and replacements with <code>printf</code>, and then display the current condition of the array inside the <code>k</code> level <code>for</code> loop. Similarly to sort_bubble, we use conditional operators with comparators to print the indicators. If <code>k == i</code>, that means the program is trying to print the referenced element, so we should print an asterisk before it. If <code>k == j</code>, it is trying to print the compared element, so we should print the "&gt;" sign before it. Finally, if the loop encounters the element that is the current smallest one, it should also print an exclamation mark before the number. Since an element can be the referenced element and the current smallest at once, it should use an <code>if</code> instead of an <code>else if</code> conditional operator.</p>
+<p>After displaying the current condition of the array, we compare the current smallest element with the element that is being compared by the program. If the compared element is smaller, we assign <code>j</code> to be the new value of <code>smallest_index</code> so that at the next iteration, the value of the smallest element is updated. At the end of all iterations of <code>j</code>, the program will have completed scanning through the unsorted portion of the array, so it can now swap the places of the referenced element (which is the <code>i</code>-th element) with the <code>i</code>+1-th smallest element. For example, on the first search, <code>i=0</code>, so it will swap the referenced element <code>A[0]</code> with the first smallest element. On the second search, <code>i=1</code>, <code>A[1]</code> is the referenced element and it will be swapped with the second smallest element. This continues until the nested loops reach the last 2 elements, compare them, and if they are in the wrong order, swap the <code>A[n-1]</code> element (which is the largest element) with the second <em>largest</em> element of the array. This will put the second largest and largest elements in their right places, completing the sort.</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token comment">// At the end of the search, swap smallest with element to replace</span>
+<span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>i <span class="token operator">!=</span> smallest_index<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    temp <span class="token operator">=</span> A<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    A<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> A<span class="token punctuation">[</span>smallest_index<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    A<span class="token punctuation">[</span>smallest_index<span class="token punctuation">]</span> <span class="token operator">=</span> temp<span class="token punctuation">;</span>
+    swaps<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><p>After sorting the array, we display the final results as such:</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token comment">/* display array after sorting */</span>
+<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Sorted array: \n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span>NUM<span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d "</span><span class="token punctuation">,</span>A<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d comparisons and %d replacements made\n"</span><span class="token punctuation">,</span> comparisons<span class="token punctuation">,</span> swaps<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><p>Compiling and running the program gives us the following output:</p>
+<p align="center"> <img src="./output-select.png" width="500"> </p>
 <style>
-  figcaption{
+    figcaption{
     text-align:center;
-    font-size:9pt
-  }
-  img{
-    filter: drop-shadow(0px 0px 7px );
-  }
-  .noshade{
-    filter: none
-  }
+        font-size:9pt
+    }
+    img{
+        filter: drop-shadow(0px 0px 7px );
+    }
+    .noshade{
+        filter: none
+    }
 </style>
 
       </div>
