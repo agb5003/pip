@@ -29,14 +29,14 @@ int main()
     // Sorting algorithm (selection)
     printf("Selection sorting...\n");
 
-    int searches = 0, swaps = 0;
+    int comparisons = 0, swaps = 0;
     for (i = 0; i < NUM-1; i++) {
         int smallest_index = i;
         printf("Search %d:\n", i+1);
 
         for (j = i+1; j < NUM; j++) {
-            searches++;
-            printf("[%d][%d] ", searches, swaps);
+            comparisons++;
+            printf("[%d][%d] ", comparisons, swaps);
             for (int k = 0; k < NUM; k++) {
                 if (k == i) { // Element to replace
                     printf("*");
@@ -59,7 +59,7 @@ int main()
             }
         }
 
-        // At the end of searches, swap smallest with element to replace
+        // At the end of the search, swap smallest with element to replace
         if (i != smallest_index) {
             temp = A[i];
             A[i] = A[smallest_index];
@@ -75,7 +75,7 @@ int main()
         printf("%d ",A[i]);
     }
     printf("\n");
-    printf("%d searches and %d replacements made", searches, swaps);
+    printf("%d comparisons and %d replacements made\n", comparisons, swaps);
     
     return 0;
     
