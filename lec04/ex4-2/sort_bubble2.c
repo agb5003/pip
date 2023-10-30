@@ -1,6 +1,6 @@
 /*
  bubble sort sort_bubble.c
- */
+*/
 
 #include <stdio.h>
 
@@ -59,7 +59,6 @@ int main()
 
                 swaps++;
             }
-
         }
         printf("\n");
     }

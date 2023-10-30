@@ -1,6 +1,6 @@
 /*
  bubble sort sort_bubble.c
- */
+*/
 
 #include <stdio.h>
 
@@ -35,7 +35,7 @@ int main()
         
         for (j = 0; j < NUM-i-1; j++) {
             comparisons++;
-            printf("[%d][%d] ", comparisons, swaps);
+            printf("[%d][%d] ", comparisons, swaps); // Display the number of comparisons and swaps done
             for (int k = 0; k < NUM; k++) {
                 if (k == j) {
                     printf("*%d ", A[k]);
@@ -59,7 +59,6 @@ int main()
 
                 swaps++;
             }
-
         }
         printf("\n");
     }
