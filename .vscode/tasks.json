@@ -92,10 +92,11 @@
             "args": [
                 "-fcolor-diagnostics",
                 "-fansi-escape-codes",
+                "-lm",
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
             ],
             "options": {
                 "cwd": "${fileDirname}"
