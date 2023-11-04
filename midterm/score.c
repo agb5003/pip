@@ -20,6 +20,7 @@ char grade(int score_sum);
 char judge(float sub_avg[], int score_sum, int score[], float total_avg);
 int find_lowest(int score[]);
 void get_tscore(int student, float sub_avg[SUB_NUM], int score[ID_NUM][SUB_NUM], float deviation_values[SUB_NUM]);
+int get_rank(int student, int score_sum[ID_NUM]);
 
 int main() {
 
@@ -67,12 +68,13 @@ int main() {
 
 // Function to display score sheet of a particular student
 int display_sheet(int student, float sub_avg[SUB_NUM], int score_sum[ID_NUM], int score[ID_NUM][SUB_NUM], float total_avg, float deviation_values[SUB_NUM]) {
-    printf("\n\n########## SCORE SHEET FOR STUDENT %d ##########\n", student);
+    printf("\n\n########### SCORE SHEET FOR STUDENT %d ###########\n", student);
     printf("                   SUB1    SUB2    SUB3    TOTAL\n");
     printf("Student %d          %d      %d      %d      %d\n", student, score[student][0], score[student][1], score[student][2], score_sum[student]);
     printf("Class average      %.2f   %.2f   %.2f   %.2f\n", sub_avg[0], sub_avg[1], sub_avg[2], total_avg);
     printf("T-score            %.2f   %.2f   %.2f     -\n", deviation_values[0], deviation_values[1], deviation_values[2]);
-    printf("\Grade assigned: %c\n\n", grade(score_sum[student]));
+    printf("Rank: %d\n", get_rank(student, score_sum));
+    printf("Grade assigned: %c\n\n", grade(score_sum[student]));
 }
 
 char grade(int score_sum) {
@@ -102,22 +104,22 @@ char judge(float sub_avg[], int score_sum, int score[], float total_avg) {
     float total_difference = (float) score_sum - total_avg;
     printf("Overall, ");
     if (total_difference >= -10 && total_difference < 0) {
-        printf("you are slightly below the class average. ");
+        printf("you place slightly below the class average. ");
     } else if (total_difference >= -20 && total_difference < -10) {
-        printf("you are below the class average. ");
+        printf("you place below the class average. ");
     } else if (total_difference >= -30 && total_difference < -20) {
-        printf("you are considerable below the class average. ");
+        printf("you place considerably below the class average. ");
     } else if (total_difference < -30) {
-        printf("you are severely below the class average. ");
+        printf("you place severely below the class average. ");
     } else {
         if (total_difference >= 0 && total_difference <= 10) {
-            printf("you are slightly above the class average. ");
+            printf("you place slightly above the class average. ");
         } else if (total_difference > 10 && total_difference <= 20) {
-            printf("you are above the class average. ");
+            printf("you place above the class average. ");
         } else if (total_difference > 20 && total_difference <= 30) {
-            printf("you are considerably above the class average. ");
+            printf("you place considerably above the class average. ");
         } else if (total_difference > 30) {
-            printf("you are much higher than the class average. ");
+            printf("you place much higher than the class average. ");
         }
     }
 
@@ -165,8 +167,17 @@ void get_tscore(int student, float sub_avg[SUB_NUM], int score[ID_NUM][SUB_NUM],
         std_dev[i] = sqrt(squared_difference_sum / ID_NUM);
 
         deviation_values[i] = 10 * (score[student][i] - sub_avg[i]) / std_dev[i] + 50;
-
-        printf("[DEBUG] devval for subject %d is %f\n", i, deviation_values[i]);
-        
     }
 }
+
+int get_rank(int student, int score_sum[ID_NUM]) {
+    int rank = 1; // Initialize as rank 1
+    for (int i = 0; i < ID_NUM; i++) {
+        if (score_sum[i] > score_sum[student]) {
+            rank++; // If there is someone who scores higher, add 1 to rank
+        }
+    }
+    return rank;
+}
+// This ranking method will result in multiple people getting the same rank
+// if they have the same exact total score (a tie).

@@ -17,9 +17,9 @@ int main(){
     
     /**** (2) processing contents ****/
     /* display scores */
-    printf("ID  SUB1  SUB2  SUB3\n");
+    printf("ID  SUB1  SUB2  SUB3 TOTAL\n");
     for (i = 0; i < ID_NUM; i++){
-        printf("[%d]  %3d   %3d   %3d\n", i, score[i][0], score[i][1], score[i][2]);
+        printf("[%d]  %3d   %3d   %3d %d\n", i, score[i][0], score[i][1], score[i][2], score[i][0] + score[i][1] + score[i][2]);
     }
     
     return 0;
