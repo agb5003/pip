@@ -8,16 +8,18 @@ C2TB1702
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 /* Macro definition */
 #define ID_NUM 10
 #define SUB_NUM 3
 
 // Function declarations
-int display_sheet(int student, float sub_avg[SUB_NUM], int score_sum[ID_NUM], int score[ID_NUM][SUB_NUM], float total_avg);
-char rank(int score_sum);
+int display_sheet(int student, float sub_avg[SUB_NUM], int score_sum[ID_NUM], int score[ID_NUM][SUB_NUM], float total_avg, float deviation_values[SUB_NUM]);
+char grade(int score_sum);
 char judge(float sub_avg[], int score_sum, int score[], float total_avg);
-int find_lowest(int scores[]);
+int find_lowest(int score[]);
+void get_tscore(int student, float sub_avg[SUB_NUM], int score[ID_NUM][SUB_NUM], float deviation_values[SUB_NUM]);
 
 int main() {
 
@@ -48,28 +50,32 @@ int main() {
 
     // Get user input
     int student;
-    printf("Select student to display score sheet (0-9): ");
+    printf("Enter student ID to display score sheet (0-9): ");
     scanf("%d", &student);
 
-    // Finally, display score sheet with all information
-    display_sheet(student, sub_avg, score_sum, score, total_avg);
-    judge(sub_avg, score_sum[student], score[student], total_avg);
+    // Process data
+    float deviation_values[] = {0,0,0};
+    get_tscore(student, sub_avg, score, deviation_values);
 
+    // Finally, display score sheet with all information
+    display_sheet(student, sub_avg, score_sum, score, total_avg, deviation_values);
+    judge(sub_avg, score_sum[student], score[student], total_avg);
 
     return 0;
 }
 
 
 // Function to display score sheet of a particular student
-int display_sheet(int student, float sub_avg[SUB_NUM], int score_sum[ID_NUM], int score[ID_NUM][SUB_NUM], float total_avg) {
+int display_sheet(int student, float sub_avg[SUB_NUM], int score_sum[ID_NUM], int score[ID_NUM][SUB_NUM], float total_avg, float deviation_values[SUB_NUM]) {
     printf("\n\n########## SCORE SHEET FOR STUDENT %d ##########\n", student);
-    printf("                SUB1    SUB2    SUB3    TOTAL\n");
-    printf("Student %d       %d      %d      %d      %d\n", student, score[student][0], score[student][1], score[student][2], score_sum[student]);
-    printf("Class average   %.2f   %.2f   %.2f   %.2f\n", sub_avg[0], sub_avg[1], sub_avg[2], total_avg);
-    printf("\nRank assigned: %c\n\n", rank(score_sum[student]));
+    printf("                   SUB1    SUB2    SUB3    TOTAL\n");
+    printf("Student %d          %d      %d      %d      %d\n", student, score[student][0], score[student][1], score[student][2], score_sum[student]);
+    printf("Class average      %.2f   %.2f   %.2f   %.2f\n", sub_avg[0], sub_avg[1], sub_avg[2], total_avg);
+    printf("T-score            %.2f   %.2f   %.2f     -\n", deviation_values[0], deviation_values[1], deviation_values[2]);
+    printf("\Grade assigned: %c\n\n", grade(score_sum[student]));
 }
 
-char rank(int score_sum) {
+char grade(int score_sum) {
     switch (score_sum)
     {
     case 0 ... 209:
@@ -93,30 +99,30 @@ char judge(float sub_avg[], int score_sum, int score[], float total_avg) {
     // Print introduction of comments
     printf("Comments: ");
     // Difference between student's sum of scores and the class average
-    float total_difference = score_sum - total_avg;
-    // automatic type conversion for score_sum[student] from int to float
+    float total_difference = (float) score_sum - total_avg;
+    printf("Overall, ");
     if (total_difference >= -10 && total_difference < 0) {
-        printf("You are slightly below the class average. ");
+        printf("you are slightly below the class average. ");
     } else if (total_difference >= -20 && total_difference < -10) {
-        printf("You are below the class average. ");
+        printf("you are below the class average. ");
     } else if (total_difference >= -30 && total_difference < -20) {
-        printf("You are considerable below the class average. ");
+        printf("you are considerable below the class average. ");
     } else if (total_difference < -30) {
-        printf("You are severely below the class average. ");
+        printf("you are severely below the class average. ");
     } else {
         if (total_difference >= 0 && total_difference <= 10) {
-            printf("You are slightly above the class average. ");
+            printf("you are slightly above the class average. ");
         } else if (total_difference > 10 && total_difference <= 20) {
-            printf("You are above the class average. ");
+            printf("you are above the class average. ");
         } else if (total_difference > 20 && total_difference <= 30) {
-            printf("You are considerably above the class average. ");
+            printf("you are considerably above the class average. ");
         } else if (total_difference > 30) {
-            printf("You are much higher than the class average. ");
+            printf("you are much higher than the class average. ");
         }
     }
 
-    char student_rank = rank(score_sum);
-    switch(student_rank) {
+    char student_grade = grade(score_sum);
+    switch(student_grade) {
         case 'A':
             printf("Keep up the good work.\n");
             break;
@@ -131,7 +137,7 @@ char judge(float sub_avg[], int score_sum, int score[], float total_avg) {
             break;
     }
 
-    if (student_rank != 'A') { // No need for additional comments if student has rank A
+    if (student_grade != 'A') { // No need for additional comments if student has grade A
         // Find subject with lowest grade
         int lowest_index = find_lowest(score);
         // Encourage improvement in the worst subject
@@ -147,4 +153,20 @@ int find_lowest(int score[]) {
         }
     }
     return smallest_index;
+}
+
+void get_tscore(int student, float sub_avg[SUB_NUM], int score[ID_NUM][SUB_NUM], float deviation_values[SUB_NUM]) {
+    float std_dev[] = {0,0,0};
+    for (int i = 0; i < SUB_NUM; i++) {
+        float squared_difference_sum = 0;
+        for (int j = 0; j < ID_NUM; j++) {
+            squared_difference_sum += pow(score[j][i] - sub_avg[i], 2);
+        }
+        std_dev[i] = sqrt(squared_difference_sum / ID_NUM);
+
+        deviation_values[i] = 10 * (score[student][i] - sub_avg[i]) / std_dev[i] + 50;
+
+        printf("[DEBUG] devval for subject %d is %f\n", i, deviation_values[i]);
+        
+    }
 }
