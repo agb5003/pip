@@ -12,6 +12,10 @@ C2TB1702
 #define ID_NUM 10
 #define SUB_NUM 3
 
+// Function declarations
+int display_sheet(int student, float sub_avg[SUB_NUM], int score_sum[ID_NUM], int score[ID_NUM][SUB_NUM], float total_avg);
+char rank(int score_sum);
+
 int main(){
     
     /**** (1) variable declaration ****/
@@ -27,14 +31,18 @@ int main(){
     }
     
     // Get total score for each student and class average for each subject
-    float sub_avg[SUB_NUM]={0,0,0};
+    float sub_avg[SUB_NUM] = {0,0,0};
+    int score_sum[ID_NUM] = {0,0,0,0,0,0,0,0,0,0};
+    int total_avg = 0;
     for (i = 0; i < ID_NUM; i++) {
-        int score_sum = 0;
-        for (int j=0; j<SUB_NUM; j++) {
-            score_sum += score[i][j];
+        for (int j = 0; j < SUB_NUM; j++) {
+            score_sum[i] += score[i][j];
             sub_avg[j] += (float) score[i][j]/ID_NUM;
         }
+        total_avg += score_sum[i]/ID_NUM;
     }
+    
+    
     
     // TEMPORARY - Subject Averages over all students
     for (int i=0; i<SUB_NUM; i++) {
@@ -44,7 +52,40 @@ int main(){
     // Get user input
     int student;
     printf("Select student to display score sheet (0-9): ");
-    scanf("%d", student);
+    scanf("%d", &student);
+
+    // Finally, display score sheet with all information
+    display_sheet(student, sub_avg, score_sum, score, total_avg);
     
     return 0;
+}
+
+
+// Function to display score sheet of a particular student
+int display_sheet(int student, float sub_avg[SUB_NUM], int score_sum[ID_NUM], int score[ID_NUM][SUB_NUM], float total_avg) {
+    printf("\n########## SCORE SHEET FOR STUDENT %d ##########\n", student);
+    printf("              | SUB1  | SUB2  | SUB3  | TOTAL\n");
+    printf("Student %d     | %d    | %d    | %d    | %d\n", student, score[student][0], score[student][1], score[student][2], score_sum[student]);
+    printf("Class average | %.2f | %.2f | %.2f | %.2f\n", sub_avg[0], sub_avg[1], sub_avg[2], total_avg);
+    printf("Rank assigned: %c\n", rank(score_sum[student]));
+}
+
+char rank(int score_sum) {
+    switch (score_sum)
+    {
+    case 0 ... 209:
+        return 'D';
+
+    case 210 ... 239:
+        return 'C';
+    
+    case 240 ... 269:
+        return 'B';
+    
+    case 270 ... 300:
+        return 'A';
+    
+    default: // ERROR
+        return 'E';
+    }
 }
