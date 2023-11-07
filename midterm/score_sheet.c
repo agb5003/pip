@@ -1,5 +1,5 @@
 /*
-score.c
+score_sheet.c
 Practice of Information Processing Midterm Assignment
 Maximilian Fernaldy
 C2TB1702
