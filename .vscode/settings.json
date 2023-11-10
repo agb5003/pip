@@ -1,7 +1,4 @@
 {
     "editor.fontsize": "13",
-    "editor.fontfamily": "JetBrains Mono",
-    "files.associations": {
-        "stdio.h": "c"
-    }
+    "editor.fontfamily": "JetBrains Mono"
 }
