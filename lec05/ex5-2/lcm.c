@@ -7,12 +7,16 @@ int main() {
     int a, b;
     printf("Enter integers to look for the LCM of (separated by a space): ");
     scanf("%d %d", &a, &b);
-    // Exit program if invalid values are entered
+
+    // Handling invalid input
     if (a <= 0 || b <= 0) {
 	printf("ERROR: Invalid values entered!\n");
+	// Terminate the program and return status 1 to the OS
+	// if invalid values are entered for a or b.
 	exit(1);
     }
-
+    
+    // Calculate least common multiple using obtained gcd
     int lcm = a * b / gcd(a, b);
 
     printf("The Least Common Multiple of %d and %d is %d.\n", a, b, lcm);
