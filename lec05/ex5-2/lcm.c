@@ -1,14 +1,28 @@
 #include <stdio.h>
+#include <stdlib.h>
+
+int gcd(int a, int b);
+
+int main() {
+    int a, b;
+    printf("Enter integers to look for the LCM of (separated by a space): ");
+    scanf("%d %d", &a, &b);
+    // Exit program if invalid values are entered
+    if (a <= 0 || b <= 0) {
+	printf("ERROR: Invalid values entered!\n");
+	exit(1);
+    }
+
+    int lcm = a * b / gcd(a, b);
+
+    printf("The Least Common Multiple of %d and %d is %d.\n", a, b, lcm);
+}
 
 int gcd(int a, int b) {
     if (a < b) { // Swap a and b to make sure b is smaller than a
 	a += b;
 	b = a - b;
 	a -= b;
-    }
-
-    if (b == 0) {
-	return a;
     }
 
     while (a % b != 0) {
@@ -21,14 +35,4 @@ int gcd(int a, int b) {
     }
 
     return b;
-}
-
-int main() {
-    int a, b;
-    printf("Enter numbers to look for the LCM of: ");
-    scanf("%d %d", &a, &b);
-
-    int lcm = a * b / gcd(a, b);
-
-    printf("The Least Common Multiple of %d and %d is %d.\n", a, b, lcm);
 }
