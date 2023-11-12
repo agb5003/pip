@@ -34,8 +34,10 @@ int gcd(int a, int b) {
 	// Swap a and b if the remainder is not 0
 	a += b; // adds b to a and assigns to a
 	b = a - b; // assigns the original value of a to b
-	a -= b; // subtracts the original value of a from a and reassigns into a, essentially making it equal to the original value of b
-	b %= a; // assigns the remainder of b%a to b (because at this point b contains original value of a and a contains the original value of b)
+	a -= b; // subtracts the original value of a from a and reassigns into a,
+    // essentially making it equal to the original value of b
+	b %= a; // assigns the remainder of b%a to b (because at this point b
+    // contains original value of a and a contains the original value of b)
     }
 
     return b;
