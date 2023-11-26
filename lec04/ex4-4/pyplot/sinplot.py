@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.font_manager as font_manager
 from scipy.stats import binom
