@@ -1,5 +1,5 @@
 #include <stdio.h>
-/* prototype declaration */
+
 int add(int v);
 void addp(int *p);
 
@@ -11,17 +11,20 @@ int main(){
 
     b = add(a);
     printf("Call by value: %d\n", b);
-    b = a;
-    addp(&b);
+
+    b = a; // revert changes
+    addp(&b); // call addp using memory address of b
     printf("Call by reference: %d\n", b);
     return 0;
-    }
-    /* call by value function */
-    int add(int v){
-    v += 10; // add 10
+}
+
+// Call by value
+int add(int v){
+    v += 10;
     return v;
-    }
-    /* call by reference(pointer)*/
-    void addp(int *p){
-    *p += 10; // add 10
+}
+
+// Call by reference
+void addp(int *p){
+    *p += 10;
 }
