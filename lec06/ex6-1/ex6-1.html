@@ -3,12 +3,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
-      
-        <script type="text/javascript">
-          window.MathJax = ({"tex":{"inlineMath":[["$","$"],["\\(","\\)"]],"displayMath":[["$$","$$"],["\\[","\\]"]]},"options":{},"loader":{}});
-        </script>
-        <script type="text/javascript" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-        
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
       
       
       
@@ -29,151 +24,51 @@
     
       <div class="crossnote markdown-preview  ">
       
-<h1 id="exercise-6-1-var_pointerc">Exercise 6-1: var_pointer.c</h1>
+<h1 id="exercise-6-1-var_pointerc">Exercise 6-1: var_pointer.c </h1>
 <p>Maximilian Fernaldy - C2TB1702</p>
-<p align="center">
-<img src="./ex6-1.png" width="70%">
-</p>
-<h2 id="introduction-to-pointers-and-memory-addresses">Introduction to
-pointers and memory addresses</h2>
-<p>In C, memory and resource management are integral factors in writing
-efficient and effective code. To that end, pointers and memory addresses
-play an important role in doing these tasks.</p>
-<p>A pointer is essentially a variable that contains the memory address
-of another variable, hence the name. It <em>points</em> to the location
-in the computer’s memory where said variable is stored. Although the
-concept of pointers and memory addresses seem foreign to other, more
-high level languages, they are in fact not exclusive to C. For instance,
-the close derivative of C, C++, <a href="https://cplusplus.com/doc/tutorial/pointers/">also uses
-pointers</a>, although the language provides higher-level concepts like
-smart pointers, which manage memory automatically, as opposed to C where
-it has to be managed programmatically by the programmer. Another
-language that makes use of pointers is Rust, which is quickly gaining
-popularity, in part due to companies switching from C to it for
-lower-level software development. This is because Rust guarantees memory
-safety without having to rely on garbage collection.</p>
-<p>At an even lower level, ASM or assembly languages (specific for each
-processor architecture) also employ memory addresses. Assembly
-programmers need to manage memory manually, much like in C.</p>
-<h3 id="why-do-we-have-to-use-pointers-and-memory-addresses">Why do we
-have to use pointers and memory addresses?</h3>
-<p>Pointers and memory addresses are important because they can allocate
-memory dynamically during runtime, which allows the programmer to manage
-memory and processing resources more efficiently. Additionally, they
-also allow the creation and manipulation of more complex data
-structures, less variable assignment (which in turn means less memory
-allocation), multiple variable returns from a function in C, and many
-other capabilities.</p>
-<h3 id="using-pointers-in-c">Using pointers in C</h3>
-<p>In C, the declaration and dereferencing of pointers are denoted by an
-asterisk (*), and obtaining the memory address of a variable is done by
-using an ampersand (&amp;). The example program below assigns the value
-1 to <code>x</code> by using a pointer that points to its memory
-address, <code>p</code>.</p>
-<p align="center">
-<img class="noshade" src="./playgroundoutput.png" width="70%">
-</p>
-<p>note that the first time <code>*p</code> is used, it is written after
-the type specification <code>int</code>, which turns it into a
-declaration of the pointer <code>p</code> which points to the memory
-address of x (<code>&amp;x</code>). The second time <code>*p</code> is
-used, it is already initialized, so by using the asterisk operator, we
-are actually dereferencing it and assigning a value to “the variable
-pointed to by <code>p</code>”, instead of the pointer <code>p</code>
-itself.</p>
-<p><a class="linker" name="as-for-memory-addresses" href="">As for memory
-addresses</a>, we have already used them when using the
-<code>scanf()</code> function. The second positional argument in
-<code>scanf()</code> takes a memory address to assign the user input to.
-For instance, we have to pass <code>&amp;x</code> instead of
-<code>x</code> to assign user input to the variable <code>x</code> using
-<code>scanf()</code>:</p>
-<pre class="text language-text language-c C" data-role="codeBlock" data-info="C"><code><span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> x<span class="token punctuation">)</span> <span class="token comment">// WRONG</span>
-<span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>x<span class="token punctuation">)</span> <span class="token comment">// CORRECT</span></code></pre>
-<p>This is due to the way functions handle arguments in C. If we pass a
-variable in the main function scope into another function, it will
-instead pass a copy of the value for the function to use, not the
-variable itself. Changes made in the function would not be reflected in
-the main function. Take the following program for example.</p>
-<p align="center">
-<img class="noshade" src="./testoutput.png" width="70%">
-</p>
-<p>As we can see, when the value of <code>num</code> is printed, it is
-still 5, and not 10, which is what it would have been if the changes in
-the function were reflected in the main function.</p>
-<p>I hope it’s clear now why we need to pass the memory address of the
-variable we want to pass the input into, instead of the variable itself.
-As the function <code>scanf()</code> modifies the contents of the
-variable, we need to pass its pointer, so that it is <em>passed by
-reference</em> instead of <em>passed by value</em>. This will allow the
-function to directly modify the variable by accessing the variable using
-its pointer, which contains the memory address. Let’s see how we can
-make the example above actually modify the value:</p>
-<p align="center">
-<img class="noshade" src="./modifiedoutput.png" width="70%">
-</p>
-<p>This time, the function is declared to take the pointer to an integer
-variable as an argument. This is as opposed to the variable itself in
-the previous program. Doing so passes the variable’s address to the
-function instead of a copy of its value. Then, that address is assigned
-to the pointer <code>p</code>, which is then used to modify the variable
-pointed to by <code>p</code>. Even though the function does not return
-anything, it is able to modify the variable in the main function,
-because it interacted directly with the variable using its pointer,
-instead of with a copy of the variable.</p>
-<p>It should be obvious too that this method has another benefit: we
-don’t need to allocate extra memory to copy the variable’s value for use
-in the function. Instead, we interact directly with the variable using
-its memory address. This memory efficiency is particularly beneficial
-when dealing with large data structures and operations.</p>
-<h2 id="exercise-6-1">Exercise 6-1</h2>
-<p align="center">
-<img src="./ex6-1.png" width="70%">
-</p>
-<p>Now that we know what pointers and memory addresses do, we can apply
-them in Exercise 6-1. In var_pointer.c, we define an integer
-<code>x</code> and pointer <code>p</code>. Then, we ask the user for
-input and store it inside <code>x</code> by using its memory address
-<code>&amp;x</code> (recall <a href="#as-for-memory-addresses">this
-part</a>).</p>
-<p>In the next part, the program assigns the memory address of
-<code>x</code> to the pointer <code>p</code>. Then, it prints out four
-lines with different format specifiers and arguments passed into the
-<code>printf()</code> function. First, it normally prints out the value
-inside the variable x with <code>printf(" x = %d \n", x);</code>. Then,
-it again prints out the value of <code>x</code>, but this time using the
-dereference operator on pointer <code>p</code>:
-<code>printf("*p = %d\n", *p)</code>, which basically means it’s telling
-the program to “print the value stored by the variable that’s pointed to
-by <code>p</code>”.</p>
-<p>The next two lines print the <em>memory address</em> of the variable
-<code>x</code>, instead of its value. This is evident by the
-<code>%p</code> format specifier used for printing the value of
-pointers, or in other words, memory addresses. The former references the
-address directly by using <code>&amp;x</code> - essentially saying
-“print the address of <code>x</code>”, while the latter uses the value
-of the pointer <code>p</code>, as we have assigned the address of
-<code>x</code> to it.</p>
-<p>Next, the value of <code>x</code> is changed using the dereference
-operator on pointer <code>p</code> - effectively saying “go to the
-variable pointed to by <code>p</code>, then change it’s value to 20”.
-This is why on the next <code>printf()</code> statement, 20 is printed
-instead of whatever was input by the user earlier.</p>
+<p align="center"> <img src="./ex6-1.png" width="70%"> </p>
+<h2 id="introduction-to-pointers-and-memory-addresses">Introduction to pointers and memory addresses </h2>
+<p>In C, memory and resource management are integral factors in writing efficient and effective code. To that end, pointers and memory addresses play an important role in doing these tasks.</p>
+<p>A pointer is essentially a variable that contains the memory address of another variable, hence the name. It <em>points</em> to the location in the computer's memory where said variable is stored. Although the concept of pointers and memory addresses seem foreign to other, more high level languages, they are in fact not exclusive to C. For instance, the close derivative of C, C++, <a href="https://cplusplus.com/doc/tutorial/pointers/">also uses pointers</a>, although the language provides higher-level concepts like smart pointers, which manage memory automatically, as opposed to C where it has to be managed programmatically by the programmer. Another language that makes use of pointers is Rust, which is quickly gaining popularity, in part due to companies switching from C to it for lower-level software development. This is because Rust guarantees memory safety without having to rely on garbage collection.</p>
+<p>At an even lower level, ASM or assembly languages (specific for each processor architecture) also employ memory addresses. Assembly programmers need to manage memory manually, much like in C.</p>
+<h3 id="why-do-we-have-to-use-pointers-and-memory-addresses">Why do we have to use pointers and memory addresses? </h3>
+<p>Pointers and memory addresses are important because they can allocate memory dynamically during runtime, which allows the programmer to manage memory and processing resources more efficiently. Additionally, they also allow the creation and manipulation of more complex data structures, less variable assignment (which in turn means less memory allocation), multiple variable returns from a function in C, and many other capabilities.</p>
+<h3 id="using-pointers-in-c">Using pointers in C </h3>
+<p>In C, the declaration and dereferencing of pointers are denoted by an asterisk (*), and obtaining the memory address of a variable is done by using an ampersand (&amp;). The example program below assigns the value 1 to <code>x</code> by using a pointer that points to its memory address, <code>p</code>.</p>
+<p align="center"> <img class="noshade" src="./playgroundoutput.png" width="70%"> </p>
+<p>note that the first time <code>*p</code> is used, it is written after the type specification <code>int</code>, which turns it into a declaration of the pointer <code>p</code> which points to the memory address of x (<code>&amp;x</code>). The second time <code>*p</code> is used, it is already initialized, so by using the asterisk operator, we are actually dereferencing it and assigning a value to "the variable pointed to by <code>p</code>", instead of the pointer <code>p</code> itself.</p>
+<p><a class="linker" name="as-for-memory-addresses" href="">As for memory addresses</a>, we have already used them when using the <code>scanf()</code> function. The second positional argument in <code>scanf()</code> takes a memory address to assign the user input to. For instance, we have to pass <code>&amp;x</code> instead of <code>x</code> to assign user input to the variable <code>x</code> using <code>scanf()</code>:</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> x<span class="token punctuation">)</span> <span class="token comment">// WRONG</span>
+<span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>x<span class="token punctuation">)</span> <span class="token comment">// CORRECT</span>
+</code></pre><p>This is due to the way functions handle arguments in C. If we pass a variable in the main function scope into another function, it will instead pass a copy of the value for the function to use, not the variable itself. Changes made in the function would not be reflected in the main function. Take the following program for example.</p>
+<p align="center"> <img class="noshade" src="./testoutput.png" width="70%"> </p>
+<p>As we can see, when the value of <code>num</code> is printed, it is still 5, and not 10, which is what it would have been if the changes in the function were reflected in the main function.</p>
+<p>I hope it's clear now why we need to pass the memory address of the variable we want to pass the input into, instead of the variable itself. As the function <code>scanf()</code> modifies the contents of the variable, we need to pass its pointer, so that it is <em>passed by reference</em> instead of <em>passed by value</em>. This will allow the function to directly modify the variable by accessing the variable using its pointer, which contains the memory address. Let's see how we can make the example above actually modify the value:</p>
+<p align="center"> <img class="noshade" src="./modifiedoutput.png" width="70%"> </p>
+<p>This time, the function is declared to take the pointer to an integer variable as an argument. This is as opposed to the variable itself in the previous program. Doing so passes the variable's address to the function instead of a copy of its value. Then, that address is assigned to the pointer <code>p</code>, which is then used to modify the variable pointed to by <code>p</code>. Even though the function does not return anything, it is able to modify the variable in the main function, because it interacted directly with the variable using its pointer, instead of with a copy of the variable.</p>
+<p>It should be obvious too that this method has another benefit: we don't need to allocate extra memory to copy the variable's value for use in the function. Instead, we interact directly with the variable using its memory address. This memory efficiency is particularly beneficial when dealing with large data structures and operations.</p>
+<h2 id="exercise-6-1">Exercise 6-1 </h2>
+<p align="center"> <img src="./ex6-1.png" width="70%"> </p>
+<p>Now that we know what pointers and memory addresses do, we can apply them in Exercise 6-1. In var_pointer.c, we define an integer <code>x</code> and pointer <code>p</code>. Then, we ask the user for input and store it inside <code>x</code> by using its memory address <code>&amp;x</code> (recall <a href="#as-for-memory-addresses">this part</a>).</p>
+<p>In the next part, the program assigns the memory address of <code>x</code> to the pointer <code>p</code>. Then, it prints out four lines with different format specifiers and arguments passed into the <code>printf()</code> function. First, it normally prints out the value inside the variable x with <code>printf(" x = %d \n", x);</code>. Then, it again prints out the value of <code>x</code>, but this time using the dereference operator on pointer <code>p</code>: <code>printf("*p = %d\n", *p)</code>, which basically means it's telling the program to "print the value stored by the variable that's pointed to by <code>p</code>".</p>
+<p>The next two lines print the <em>memory address</em> of the variable <code>x</code>, instead of its value. This is evident by the <code>%p</code> format specifier used for printing the value of pointers, or in other words, memory addresses. The former references the address directly by using <code>&amp;x</code> - essentially saying "print the address of <code>x</code>", while the latter uses the value of the pointer <code>p</code>, as we have assigned the address of <code>x</code> to it.</p>
+<p>Next, the value of <code>x</code> is changed using the dereference operator on pointer <code>p</code> - effectively saying "go to the variable pointed to by <code>p</code>, then change it's value to 20". This is why on the next <code>printf()</code> statement, 20 is printed instead of whatever was input by the user earlier.</p>
 <style>
-    figcaption {
+    figcaption{
         text-align:center;
-        font-size:9pt;
+        font-size:9pt
     }
-    img {
+    img{
         filter: drop-shadow(0px 0px 7px );
     }
-    .noshade {
-        filter: none;
+    .noshade{
+        filter: none
     }
-    .linker {
-        text-decoration: none;
-        color: inherit !important;
-
+    .disclaimer{
+        font-size: 9pt
+    }
+    .linker{
+        color: inherit !important
     }
 </style>
 

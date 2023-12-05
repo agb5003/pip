@@ -1,12 +1,8 @@
-/*
-file_write.c
-Sample program for file output
-*/
 #include <stdio.h>
-int main(void){
+int main(void) {
     FILE *fp;
-    fp = fopen("sample_out.txt", "a");
-    if(fp == NULL) {
+    fp = fopen("sample_out.txt", "w");
+    if (fp == NULL) {
         printf("Can't open file \n");
         return 1;
     }
