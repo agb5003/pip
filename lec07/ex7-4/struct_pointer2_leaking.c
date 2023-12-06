@@ -21,13 +21,15 @@ int main() {
     };
 
     int member_ID = -1;  // Initialize member ID as something invalid
-    while (member_ID < 0 || member_ID >= MEMBER_NUM) {
-        printf("Enter member ID to access information: ");
-        scanf("%d", &member_ID);
-        if (member_ID < 0 || member_ID >= MEMBER_NUM) {
-            printf("Please enter a valid member ID.\n");
-        }
-    }
+    // while (member_ID < 0 || member_ID >= MEMBER_NUM) {
+    //     printf("Enter member ID to access information: ");
+    //     scanf("%d", &member_ID);
+    //     if (member_ID < 0 || member_ID >= MEMBER_NUM) {
+    //         printf("Please enter a valid member ID.\n");
+    //     }
+    // }
+    printf("Enter member ID to access information: ");
+    scanf("%d", &member_ID);
 
     print_person(member, member_ID);
     // Pass memory address of the right member to print function

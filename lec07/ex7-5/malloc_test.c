@@ -3,7 +3,6 @@
 
 int main() {
     int num;
-    // Note that we specify the array size to be 10 here.
     int array[10];
     int *ptr;  // even though it doesn't look like it, ptr can be treated like an array.
     // This is because we can treat it as the pointer to the first element of an array.
@@ -28,7 +27,7 @@ int main() {
     }
 
     for (int i = 0; i < num; i++) {
-        printf("%d %d\n", array[i], ptr[i]);
+        printf("array[%d] = %d, ptr[%d] = %d\n", i, array[i], i, ptr[i]);
     }
 
     printf("\n--- Memory Usage ---\n");
