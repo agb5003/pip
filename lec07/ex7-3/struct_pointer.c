@@ -21,7 +21,8 @@ int main() {
     };
 
     for (int i = 0; i < MEMBER_NUM; i++) {
-        print_person(i, member+i);
+        print_person(i, &member[i]);
+        // alternatively, member+i can be passed instead of &member[i]
     }
 }
 
