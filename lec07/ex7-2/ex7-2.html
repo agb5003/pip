@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head>
-      <title>ex7-1</title>
+      <title>ex7-2</title>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
@@ -24,50 +24,68 @@
     
       <div class="crossnote markdown-preview  ">
       
-<h1 id="exercise-7-1-array_pointerc">Exercise 7-1: array_pointer.c </h1>
+<h1 id="exercise-7-2-maxminc">Exercise 7-2: maxmin.c </h1>
 <p>Maximilian Fernaldy - C2TB1702</p>
-<h2 id="introduction-to-array-pointers-and-why-we-use-array-subscripts-instead-of-pointer-arithmetic-notation">Introduction to "array pointers" and why we use array subscripts instead of pointer arithmetic notation </h2>
-<p>We have covered in the previous lecture that pointers are essentially variables that <em>point</em> to the memory address of another variable. In the case of arrays, in a sense, when we create an array, we have already created a pointer to it. By assigning a name to an array like so:</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-int">int</span> array<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-</code></pre><p>we have assigned a pointer called <code>array</code> to the first element in the array. Note that this does not mean all the elements in the array is stored in a single memory location/address. Memory addresses are <em>not</em> the same as pointers. Pointers <em>store</em> memory addresses, but they are not the same. To access the elements, we must use the <em>offset</em> or the <em>index</em> of the element we want to access. For example, if we want to access the i-th element of the array we created earlier using a pointer,</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token operator">*</span><span class="token punctuation">(</span>array<span class="token operator">+</span>i<span class="token punctuation">)</span>
-</code></pre><p>will do it. We can think of it as there being a single pointer pointing to the first element of the array, and that pointer is <code>array</code>. When we add an offset <code>i</code> to the pointer and <em>then</em> dereference it, it's going to access the value that is stored in the i-th index of the array. Even though it might seem like something very obvious, there's something really important and interesting happening here, and it has something to do with data types and the space they take in memory.</p>
-<p>Recall that different data types require different amounts of memory. The specific size depends from system to system, for example, an <code>int</code> type typically takes 4 bytes, and <code>double</code> typically takes 8 bytes on 32-bit and 64-bit systems. But even this is not always true, and the actual size can only be determined by using <code>sizeof(int)</code>. However, it always stands that some types that provide more precision/maximum size of stored data will require more memory. A <code>double</code> will always require more memory than an <code>int</code>:</p>
-<p align="center"> <img width="75%" src="./assets/Screenshot 2023-12-03 at 1.30.27.png" alt="Screenshot 2023-12-03 at 1.25.59"> </p>
-<p>Obviously, since pointers are just variables that store addresses, they too, have a size requirement:</p>
-<p align="center"> <img src="./assets/Screenshot 2023-12-03 at 2.15.29.png" width="75%"> </p>
-<p>So, if different types have different size requirements, how does the program know where the next element is when we use <code>*(array+i)</code> ? Well, remember that when we declare the pointer with <code>int array</code>, we are assigning a type to the variable. This type is immutable—it can't ever be changed unless we convert it into another type by assigning its value to a new variable, but that does not change the type of the variable, it creates a new variable with a different type. This behavior in languages is called "strongly typed", and strongly typed languages have numerous benefits over their <em>loosely typed</em> counterparts, especially in low-level memory allocation and optimization like the example above. As C is a strongly typed language, <strong>it allows the compiler to know exactly what variable type will be stored in the memory space pointed to by the pointer</strong>, and this is beneficial for when we use <code>*(array+i)</code>, because if it knows the size of each element in the array, it knows where exactly each element starts and ends, and this is how it knows how to shift between elements in an array without us specifying how many bytes to shift.</p>
-<p>But if we try reading some C code that other people write, it's almost immediately obvious that the notation <code>*(array+i)</code> is almost <strong>never</strong> used to access elements of an array using the pointer. This is because, as we have gone over earlier, <strong>array "names" are pointers to the first element.</strong> This means, when we use <code>array[i]</code> to access an element of an array, it's effectively doing the same thing as <code>*(array+i)</code>, just using a different operator—the <em>array subscript</em> operator, or the square brackets. The array subscript method is simply a feature of the C programming language to make it easier for programmers to read the code. Reading <code>array[i]</code> will <em>instantly</em> give you an intuitive understanding—it's the i-th element in <code>array[]</code>. Reading <code>*(array+i)</code>, however, might not be so obvious.</p>
-<p>That doesn't mean the pointer arithmetic notation is useless, though. It's particularly useful when teaching concepts like the relation between arrays and pointers, and memory allocation. I hope I did a decent job at explaining my understanding of arrays and pointers in this report.</p>
-<h2 id="exercise-7-1">Exercise 7-1 </h2>
-<p>Instead of accessing elements in <code>a</code> as usual, we are tasked to use a pointer <code>p</code> instead. To do this, we can simply use pointer arithmetic notation <code>*(p+i)</code> instead of the usual <code>a[i]</code>. They both mean exactly the same thing.</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-for">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"a[%d] = %d \n"</span><span class="token punctuation">,</span>i<span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">(</span>p<span class="token operator">+</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p class="disclaimer"> Note: some links and other HTML-related objects may not work in pdf form. Consider reading the webpage format of the report <a href="https://agb5003.com/coursework/pip/lec07">here</a>. </p>
+<p>In exercise 7-2, we are tasked to find the minimum and maximum values of an array. However, rather than creating two separate functions that each return a single value, we are to use a single function with access to variables declared in the main function. This can be done by using pointers, as they transcend scopes.</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-int">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-int">int</span> max<span class="token punctuation">,</span>min<span class="token punctuation">;</span>
+    <span class="token keyword keyword-int">int</span> array<span class="token punctuation">[</span>LEN<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-int">int</span> i<span class="token punctuation">;</span>
+    <span class="token comment">// assign array</span>
+    <span class="token keyword keyword-for">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> LEN<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"array[%d] = "</span><span class="token punctuation">,</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>array<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">/* find max-min value from array */</span>
+    <span class="token function">maxmin_array</span><span class="token punctuation">(</span>array<span class="token punctuation">,</span> <span class="token operator">&amp;</span>max<span class="token punctuation">,</span> <span class="token operator">&amp;</span>min<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"max:%d min:%d\n"</span><span class="token punctuation">,</span> max<span class="token punctuation">,</span> min<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-return">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><p>In the previous section I mentioned that array "names" are simply pointers to the first element of the array. We can see this proven as we assigned <code>a</code> to <code>p</code> with <code>p = a;</code> to assign the start of the array to our pointer <code>p</code>. Notice that by doing <code>p = a</code>, we are simply copying the address of the first element of the array into another variable. This does not create another array, it just creates another "name" for the array that it can be accessed from. Any changes made to <code>p</code> will also reflect in <code>a</code>—this is an instance of <em>pass by reference</em>.</p>
-<p align="center"> <img src="./assets/Screenshot 2023-12-03 at 2.02.33.png" alt="Screenshot 2023-12-03 at 2.02.33" width="75%"> </p>
-<p>Additionally, since <code>p</code> is just a copy for the address of the first element of the array, we can infer that it can also be treated as another <code>name</code> of the variable. What this means is now, <code>p[i]</code> and <code>a[i]</code> do exactly the same thing. If we do the following, the output will be the same.</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-for">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"a[%d] = %d \n"</span><span class="token punctuation">,</span>i<span class="token punctuation">,</span> p<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre><p>In the main function, we initialize the variables <code>max</code> and <code>min</code> to contain the value of the maximum integers. Then we create and fill the array, call the <code>maxmin_array()</code> function and pass the array, along with the memory addresses of <code>max</code> and <code>min</code> so that the function can directly modify their values.</p>
+<p>As for the function itself,</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-void">void</span> <span class="token function">maxmin_array</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> array<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> <span class="token operator">*</span>pmax<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> <span class="token operator">*</span>pmin<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// This function modifies max and min by using the pointers pmax and pmin.</span>
+	<span class="token comment">// For the array, we are essentially passing the pointer to the first element</span>
+	<span class="token comment">// by passing int array[] as an argument. Note that this can essentially be </span>
+	<span class="token comment">// replaced by passing int *array, but it's less readable in this context.</span>
+	
+	<span class="token comment">// First set max and min to the first element</span>
+	<span class="token operator">*</span>pmax <span class="token operator">=</span> array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">*</span>pmin <span class="token operator">=</span> array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+	<span class="token comment">// The for loop can start from i=1 since initial value is index 0</span>
+	<span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> LEN<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>array<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&gt;</span> <span class="token operator">*</span>pmax<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token operator">*</span>pmax <span class="token operator">=</span> array<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>  <span class="token comment">// array[i] is the same as *(array+i).</span>
+		<span class="token punctuation">}</span> <span class="token keyword keyword-else">else</span> <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>array<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&lt;</span> <span class="token operator">*</span>pmin<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token operator">*</span>pmin <span class="token operator">=</span> array<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre><p align="center"> <img src="./assets/Screenshot 2023-12-03 at 2.21.14.png" width="75%"> </p>
-<p>and of course, <code>a[i]</code> and <code>*(a+i)</code> both work, too.</p>
-<p align="center"> <img src="./assets/Screenshot 2023-12-03 at 2.25.20.png" width="75%"> </p>
-<p>I think the purpose of exercise 7-1 is to demonstrate the relationship between arrays and pointers, and not necessarily an example of how to use pointers to modify or access arrays—creating alternate names like <code>p = a</code> is certainly useful, but for the use case of accessing elements of an array, <code>*(p+i)</code> is less preferable as it is much less readable than <code>p[i]</code> or <code>a[i]</code>.</p>
+</code></pre><p>In the function, we first initialize max and min using the pointers to them, by dereferencing the pointers:</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token operator">*</span>pmax <span class="token operator">=</span> array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">*</span>pmin <span class="token operator">=</span> array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre><p>To find the maximum and minimum values in the array, we iterate through it and check if the current number is either smaller than <code>min</code> or larger than <code>max</code>. If they fulfill the criteria, the respective value is updated with</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token operator">*</span>pmax <span class="token operator">=</span> array<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre><p>or</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token operator">*</span>pmin <span class="token operator">=</span> array<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre><p>Which at the end of the loop will have <code>max</code> containing the largest number and <code>min</code> containing the smallest number in the array. At the end of the function, we don't need to return anything, because the max and min values are already stored in variables in the main function.</p>
 <style>
-	figcaption{
-		text-align:center;
-		font-size:9pt
-	}
-	.noshade{
-		filter: none
-	}
-	.disclaimer{
-		font-size: 9pt
-	}
-	.linker{
-		color: inherit !important
-	}
+    figcaption{
+        text-align:center;
+        font-size:9pt
+    }
+    img{
+        filter: drop-shadow(0px 0px 7px );
+    }
+    .noshade{
+        filter: none
+    }
+    .disclaimer{
+        font-size: 9pt
+    }
+    .linker{
+        color: inherit !important
+    }
 </style>
 
       </div>

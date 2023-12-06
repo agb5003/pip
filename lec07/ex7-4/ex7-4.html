@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head>
-      <title>ex7-1</title>
+      <title>ex7-4</title>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
@@ -24,50 +24,80 @@
     
       <div class="crossnote markdown-preview  ">
       
-<h1 id="exercise-7-1-array_pointerc">Exercise 7-1: array_pointer.c </h1>
+<h1 id="exercise-7-4-struct_pointer2c">Exercise 7-4: struct_pointer2.c </h1>
 <p>Maximilian Fernaldy - C2TB1702</p>
-<h2 id="introduction-to-array-pointers-and-why-we-use-array-subscripts-instead-of-pointer-arithmetic-notation">Introduction to "array pointers" and why we use array subscripts instead of pointer arithmetic notation </h2>
-<p>We have covered in the previous lecture that pointers are essentially variables that <em>point</em> to the memory address of another variable. In the case of arrays, in a sense, when we create an array, we have already created a pointer to it. By assigning a name to an array like so:</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-int">int</span> array<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-</code></pre><p>we have assigned a pointer called <code>array</code> to the first element in the array. Note that this does not mean all the elements in the array is stored in a single memory location/address. Memory addresses are <em>not</em> the same as pointers. Pointers <em>store</em> memory addresses, but they are not the same. To access the elements, we must use the <em>offset</em> or the <em>index</em> of the element we want to access. For example, if we want to access the i-th element of the array we created earlier using a pointer,</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token operator">*</span><span class="token punctuation">(</span>array<span class="token operator">+</span>i<span class="token punctuation">)</span>
-</code></pre><p>will do it. We can think of it as there being a single pointer pointing to the first element of the array, and that pointer is <code>array</code>. When we add an offset <code>i</code> to the pointer and <em>then</em> dereference it, it's going to access the value that is stored in the i-th index of the array. Even though it might seem like something very obvious, there's something really important and interesting happening here, and it has something to do with data types and the space they take in memory.</p>
-<p>Recall that different data types require different amounts of memory. The specific size depends from system to system, for example, an <code>int</code> type typically takes 4 bytes, and <code>double</code> typically takes 8 bytes on 32-bit and 64-bit systems. But even this is not always true, and the actual size can only be determined by using <code>sizeof(int)</code>. However, it always stands that some types that provide more precision/maximum size of stored data will require more memory. A <code>double</code> will always require more memory than an <code>int</code>:</p>
-<p align="center"> <img width="75%" src="./assets/Screenshot 2023-12-03 at 1.30.27.png" alt="Screenshot 2023-12-03 at 1.25.59"> </p>
-<p>Obviously, since pointers are just variables that store addresses, they too, have a size requirement:</p>
-<p align="center"> <img src="./assets/Screenshot 2023-12-03 at 2.15.29.png" width="75%"> </p>
-<p>So, if different types have different size requirements, how does the program know where the next element is when we use <code>*(array+i)</code> ? Well, remember that when we declare the pointer with <code>int array</code>, we are assigning a type to the variable. This type is immutable—it can't ever be changed unless we convert it into another type by assigning its value to a new variable, but that does not change the type of the variable, it creates a new variable with a different type. This behavior in languages is called "strongly typed", and strongly typed languages have numerous benefits over their <em>loosely typed</em> counterparts, especially in low-level memory allocation and optimization like the example above. As C is a strongly typed language, <strong>it allows the compiler to know exactly what variable type will be stored in the memory space pointed to by the pointer</strong>, and this is beneficial for when we use <code>*(array+i)</code>, because if it knows the size of each element in the array, it knows where exactly each element starts and ends, and this is how it knows how to shift between elements in an array without us specifying how many bytes to shift.</p>
-<p>But if we try reading some C code that other people write, it's almost immediately obvious that the notation <code>*(array+i)</code> is almost <strong>never</strong> used to access elements of an array using the pointer. This is because, as we have gone over earlier, <strong>array "names" are pointers to the first element.</strong> This means, when we use <code>array[i]</code> to access an element of an array, it's effectively doing the same thing as <code>*(array+i)</code>, just using a different operator—the <em>array subscript</em> operator, or the square brackets. The array subscript method is simply a feature of the C programming language to make it easier for programmers to read the code. Reading <code>array[i]</code> will <em>instantly</em> give you an intuitive understanding—it's the i-th element in <code>array[]</code>. Reading <code>*(array+i)</code>, however, might not be so obvious.</p>
-<p>That doesn't mean the pointer arithmetic notation is useless, though. It's particularly useful when teaching concepts like the relation between arrays and pointers, and memory allocation. I hope I did a decent job at explaining my understanding of arrays and pointers in this report.</p>
-<h2 id="exercise-7-1">Exercise 7-1 </h2>
-<p>Instead of accessing elements in <code>a</code> as usual, we are tasked to use a pointer <code>p</code> instead. To do this, we can simply use pointer arithmetic notation <code>*(p+i)</code> instead of the usual <code>a[i]</code>. They both mean exactly the same thing.</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-for">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"a[%d] = %d \n"</span><span class="token punctuation">,</span>i<span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">(</span>p<span class="token operator">+</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p>Instead of displaying information of all members, struct_pointer2.c will only display the selected member's information, using their "ID".</p>
+<p>To do this, we can ask the user for the intended user's ID, then pass the pointer to the struct and the member ID to a function:</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-int">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// variable declaration</span>
+    st_person member<span class="token punctuation">[</span>MEMBER_NUM<span class="token punctuation">]</span> <span class="token operator">=</span>
+    <span class="token punctuation">{</span>
+        <span class="token punctuation">{</span><span class="token string">"Ichiro"</span><span class="token punctuation">,</span> <span class="token number">160</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span><span class="token string">"Jiro"</span><span class="token punctuation">,</span> <span class="token number">170</span><span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span><span class="token string">"Saburo"</span><span class="token punctuation">,</span> <span class="token number">180</span><span class="token punctuation">,</span> <span class="token number">70</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-int">int</span> member_ID <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// Initialize member ID as something invalid</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Enter member ID to access information: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>member_ID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">print_person</span><span class="token punctuation">(</span>member<span class="token punctuation">,</span> member_ID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Pass memory address of the right member to print function</span>
+
+    <span class="token keyword keyword-return">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><p>In the previous section I mentioned that array "names" are simply pointers to the first element of the array. We can see this proven as we assigned <code>a</code> to <code>p</code> with <code>p = a;</code> to assign the start of the array to our pointer <code>p</code>. Notice that by doing <code>p = a</code>, we are simply copying the address of the first element of the array into another variable. This does not create another array, it just creates another "name" for the array that it can be accessed from. Any changes made to <code>p</code> will also reflect in <code>a</code>—this is an instance of <em>pass by reference</em>.</p>
-<p align="center"> <img src="./assets/Screenshot 2023-12-03 at 2.02.33.png" alt="Screenshot 2023-12-03 at 2.02.33" width="75%"> </p>
-<p>Additionally, since <code>p</code> is just a copy for the address of the first element of the array, we can infer that it can also be treated as another <code>name</code> of the variable. What this means is now, <code>p[i]</code> and <code>a[i]</code> do exactly the same thing. If we do the following, the output will be the same.</p>
-<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-for">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"a[%d] = %d \n"</span><span class="token punctuation">,</span>i<span class="token punctuation">,</span> p<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre><p>Then, for the function itself, we can use pointer arithmetic to access the correct element, then the arrow operator to access the members:</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-void">void</span> <span class="token function">print_person</span><span class="token punctuation">(</span>st_person pointer_member<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> member_ID<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n##### INFORMATION FOR MEMBER ID #%d #####\n"</span><span class="token punctuation">,</span> member_ID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Name = %s\n"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>pointer_member<span class="token operator">+</span>member_ID<span class="token punctuation">)</span><span class="token operator">-&gt;</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Height = %.2f\n"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>pointer_member<span class="token operator">+</span>member_ID<span class="token punctuation">)</span><span class="token operator">-&gt;</span>height<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Weight = %.2f\n"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>pointer_member<span class="token operator">+</span>member_ID<span class="token punctuation">)</span><span class="token operator">-&gt;</span>weight<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><p align="center"> <img src="./assets/Screenshot 2023-12-03 at 2.21.14.png" width="75%"> </p>
-<p>and of course, <code>a[i]</code> and <code>*(a+i)</code> both work, too.</p>
-<p align="center"> <img src="./assets/Screenshot 2023-12-03 at 2.25.20.png" width="75%"> </p>
-<p>I think the purpose of exercise 7-1 is to demonstrate the relationship between arrays and pointers, and not necessarily an example of how to use pointers to modify or access arrays—creating alternate names like <code>p = a</code> is certainly useful, but for the use case of accessing elements of an array, <code>*(p+i)</code> is less preferable as it is much less readable than <code>p[i]</code> or <code>a[i]</code>.</p>
+</code></pre><p>This program works, and there is <strong>no error returned</strong> by the compiler. However, there is a glaring mistake in <em>memory safety</em>. When we enter numbers lower than 0 or higher than 2, the program still runs, but there's something wrong with the values displayed:</p>
+<p align="center"> <img class="noshade" src="./assets/segfault.png" width="75%"> </p>
+<p>Either the values are "blank" or they are outlandishly big. This is because the program is accessing information that it's not supposed to access. Our array <code>members</code> only contains 3 elements with indices 0 to 2, but we're accessing numbers outside that boundary. As a consequence, the program accesses memory locations that are either uninitialized or used by <strong>other programs</strong> on our system. In this case, we encounter some gibberish, because the program may be trying to interpret data stored in another data type. However, if some malicious actor designs a program to correctly interpret this data, and the program is given access to the memory of our system, we can imagine how dangerous that may be. It's even more dangerous when we give the user access to writing and erasing data to and from memory. This program currently contains <strong>unsafe code</strong>, because a <strong>segmentation fault or memory access violation</strong> is possible. To fix this, we need to confine the user to the valid indices:</p>
+<pre data-role="codeBlock" data-info="C" class="language-c C"><code><span class="token keyword keyword-int">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// variable declaration</span>
+    st_person member<span class="token punctuation">[</span>MEMBER_NUM<span class="token punctuation">]</span> <span class="token operator">=</span>
+    <span class="token punctuation">{</span>
+        <span class="token punctuation">{</span><span class="token string">"Ichiro"</span><span class="token punctuation">,</span> <span class="token number">160</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span><span class="token string">"Jiro"</span><span class="token punctuation">,</span> <span class="token number">170</span><span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span><span class="token string">"Saburo"</span><span class="token punctuation">,</span> <span class="token number">180</span><span class="token punctuation">,</span> <span class="token number">70</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-int">int</span> member_ID <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// Initialize member ID as something invalid</span>
+    <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span>member_ID <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token operator">||</span> member_ID <span class="token operator">&gt;=</span> MEMBER_NUM<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Enter member ID to access information: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>member_ID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>member_ID <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token operator">||</span> member_ID <span class="token operator">&gt;=</span> MEMBER_NUM<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Please enter a valid member ID.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">print_person</span><span class="token punctuation">(</span>member<span class="token punctuation">,</span> member_ID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Pass memory address of the right member to print function</span>
+
+    <span class="token keyword keyword-return">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><p>The while loop will keep asking the user for a member ID while throwing an alert that the entered one is invalid. Then when a valid member ID is entered, the program can proceed to accessing the memory.</p>
+<p align="center"> <img class="noshade" src="./assets/struct_pointer2.png" width="75%"> </p>
 <style>
-	figcaption{
-		text-align:center;
-		font-size:9pt
-	}
-	.noshade{
-		filter: none
-	}
-	.disclaimer{
-		font-size: 9pt
-	}
-	.linker{
-		color: inherit !important
-	}
+    figcaption{
+        text-align:center;
+        font-size:9pt
+    }
+    img{
+        filter: drop-shadow(0px 0px 7px );
+    }
+    .noshade{
+        filter: none
+    }
+    .disclaimer{
+        font-size: 9pt
+    }
+    .linker{
+        color: inherit !important
+    }
 </style>
 
       </div>
