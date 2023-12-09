@@ -1,0 +1,16 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/max/repos/pip/final/J_score1'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003098, symSize: 0xC0 }
+  - { offsetInCU: 0x47, offset: 0x47, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003098, symSize: 0xC0 }
+  - { offsetInCU: 0xA7, offset: 0xA7, size: 0x8, addend: 0x0, symName: _read_data, symObjAddr: 0xC0, symBinAddr: 0x100003158, symSize: 0x1C4 }
+  - { offsetInCU: 0x11A, offset: 0x11A, size: 0x8, addend: 0x0, symName: _calc_score, symObjAddr: 0x284, symBinAddr: 0x10000331C, symSize: 0x50 }
+  - { offsetInCU: 0x13E, offset: 0x13E, size: 0x8, addend: 0x0, symName: _rank_score, symObjAddr: 0x2D4, symBinAddr: 0x10000336C, symSize: 0x240 }
+  - { offsetInCU: 0x1C4, offset: 0x1C4, size: 0x8, addend: 0x0, symName: _write_data, symObjAddr: 0x514, symBinAddr: 0x1000035AC, symSize: 0x180 }
+  - { offsetInCU: 0x221, offset: 0x221, size: 0x8, addend: 0x0, symName: _get_wanted_csv, symObjAddr: 0x694, symBinAddr: 0x10000372C, symSize: 0x14C }
+  - { offsetInCU: 0x273, offset: 0x273, size: 0x8, addend: 0x0, symName: _query_csv, symObjAddr: 0x7E0, symBinAddr: 0x100003878, symSize: 0x200 }
+  - { offsetInCU: 0x2CF, offset: 0x2CF, size: 0x8, addend: 0x0, symName: _match_pattern, symObjAddr: 0x9E0, symBinAddr: 0x100003A78, symSize: 0x44 }
+  - { offsetInCU: 0x305, offset: 0x305, size: 0x8, addend: 0x0, symName: _get_number_of_teams, symObjAddr: 0xA24, symBinAddr: 0x100003ABC, symSize: 0xA4 }
+  - { offsetInCU: 0x349, offset: 0x349, size: 0x8, addend: 0x0, symName: _swap_SC, symObjAddr: 0xAC8, symBinAddr: 0x100003B60, symSize: 0x8C }
+...

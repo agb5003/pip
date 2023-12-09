@@ -10,6 +10,7 @@ C2TB1702
 
 #include <stdio.h>  // Standard input/output
 #include <stdlib.h>  // Library for memory allocation and program control
+#include <time.h>
 
 #define NAME_LENGTH 20
 #define DATA_LEN 100
@@ -42,13 +43,13 @@ int main(void)
     FILE *fout;
     /* (1) Reading file */
     int number_of_teams;
-    SC *table = read_data("J_result2023.csv", &number_of_teams);
+    SC *table = read_data("J_resultlarge.csv", &number_of_teams);
 
     int i;
     
     /* Open reading file */
     /* Open writing file */
-    fout = fopen("J_score.txt","w"); // open output file
+    fout = fopen("J_scorelarge1.txt","w"); // open output file
     
     
     /* （2）Calculating score */
@@ -125,6 +126,9 @@ void calc_score(SC *team)
 
 void rank_score(SC table[], int number_of_teams)
 {
+    clock_t start, end;
+    double elapsed;
+    start = clock();
     // Use selection sort
     for (int i = 0; i < number_of_teams-1; i++) {
         int highest_rank_index = i;
@@ -149,6 +153,9 @@ void rank_score(SC table[], int number_of_teams)
             swap_SC(&table[i], &table[highest_rank_index]);
         }
     }
+    end = clock();
+    elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("[DEBUG] %lf seconds elapsed\n",elapsed);
 }
 
 void swap_SC(SC *team1, SC *team2)
