@@ -22,8 +22,8 @@ def generate_goals():
 file_path = "J_resultlarge.csv"
 
 
-result = [[0] * 6 for _ in range(1000)]
-for i in range(0,1000):
+result = [[0] * 6 for _ in range(100000)]
+for i in range(0,100000):
     result[i][0] = "Team " + f"{i}"
     result[i][1:4] = generate_wdl()
     result[i][4:6] = generate_goals()

@@ -1,7 +1,4 @@
 {
     "editor.fontsize": "13",
-    "editor.fontfamily": "JetBrains Mono",
-    "cSpell.words": [
-        "winpoints"
-    ]
+    "editor.fontfamily": "JetBrains Mono"
 }

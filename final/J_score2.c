@@ -211,7 +211,6 @@ void swap_pointers(SC **pointerA, SC **pointerB) {
     *pointerB = temp;
 }
 
-/* Writing ranking file */
 void write_data(FILE *fout, SC *rank_array[], int number_of_teams)
 {
     fprintf(fout, "| Rank | Team Name            | Wins | Draws | Losses | Goals Scored | Goals Conceded | Points | Goal Difference |\n");

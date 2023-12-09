@@ -15,7 +15,7 @@ Mostly, the flow of execution in both J_score1.c and J_score2.c is the same:
 
 However, the methods that the two programs use to execute two of these tasks are different. First of all, J_score1.c employs a simple selection sort to sort the teams in order, while J_score2.c uses a smarter heap sort algorithm. Secondly, J_score1.c works directly with the array, moving entire structs around each time a swap is performed for the sorting algorithm. On the contrary, J_score2.c sorts an array of pointers to the structs instead, which are much smaller than the structs they point to, and as a consequence, are easier to move around. For a short list with 18 members like this case, the difference might not be very noticeable, but for large databases with thousands of entries, each of them structs containing a considerable amount of data, the difference will be very noticeable. I will demonstrate this difference later. 
 
-## 1. Common operation between J_score1.c and J_score2.c
+## 1. Common operations between J_score1.c and J_score2.c
 
 For tasks 1 to 3, J_score1.c and J_score2.c performs identically. First, we read the data from J_result2023.csv using read_data. Originally, `read_data()` takes the file pointer from the main function and writes the data to a table also declared in the main function. At first I used this approach, but this makes modifying the csv file difficult. If an entry is added to the csv file, the program breaks because a macro definition is used to define the number of teams in the file (`#define TEAM_NUM 18`), and this macro definition is used to define the size of `table[]`. In my opinion, the number of teams should be determined by the reading function `read_data()`, then memory allocation is done dynamically according to how many teams there are. This means the program can be used with any csv file as long as the format is correct, regardless of the number of teams in the file.
 
@@ -389,18 +389,42 @@ void swap_pointers(SC **pointerA, SC **pointerB) {
 
 For data types that are not numbers, we have no choice but to use a temp variable to store temporary data for swapping. Since a pointer is typically only 4 bytes, we don't really have to worry about performance here.
 
-### f). Output of J_score2.c
+### f). Printing the output of J_score2.c
+
+Printing the output of J_score2.c is a bit different from J_score1.c, because what we have sorted is the array of pointers, not the table itself. The table stays as it was, ordered alphabetically. In order to display the ranked data in order, we need to use the array of pointers to access the table. To do this, we use the arrow operator to access the struct that is pointed to by `rank_array[i]`, then access its respective members. Everything else, including the formatting, stays the same.
+
+```C
+void write_data(FILE *fout, SC *rank_array[], int number_of_teams)
+{
+    fprintf(fout, "| Rank | Team Name            | Wins | Draws | Losses | Goals Scored | Goals Conceded | Points | Goal Difference |\n");
+    fprintf(fout, "|------|----------------------|------|-------|--------|--------------|----------------|--------|-----------------|\n");
+    for (int i = 0; i < number_of_teams; i++) {
+        fprintf(fout, "| %-4d | %-20s | %4d | %5d | %6d | %12d | %14d | %6d | %15d |\n",
+                i+1,
+                rank_array[i]->name,
+                rank_array[i]->win,
+                rank_array[i]->draw,
+                rank_array[i]->loss,
+                rank_array[i]->GF,
+                rank_array[i]->GA,
+                rank_array[i]->score,
+                rank_array[i]->point_diff);
+    }
+}
+```
 
 Compiling and running the program, we get an identical result as the one we get from J_score1.c:
 
 <p align='center'> <img class='noshade' src='./assets/output2.png' width=75%> </p>
 
 
+
+
 ## 4. Testing large datasets
 
-Let's now test just how much more efficient heapsort is compared to selection sort. The effect will not show if we only have 18 teams, but what about a thousand?
+Let's now test just how much more efficient heapsort is compared to selection sort. The effect will not show if we only have 18 teams, but what about a thousand? No, a **hundred thousand?**
 
-I made a rough python script that generates randomized result data of games won, games drawn, games lost, goals scored and goals conceded. I adjusted the ranges, but the data is probably still nonsensical when analyzed closely. However, it will give us a rough estimate of how scaling affects efficiency of sorting algorithms. The python script outputs a file containing the result of a thousand different teams:
+I made a rough python script that generates randomized result data of games won, games drawn, games lost, goals scored and goals conceded. I adjusted the ranges, but the data is probably still nonsensical when analyzed closely. However, it will give us a rough estimate of how scaling affects efficiency of sorting algorithms. The python script outputs a file containing the result of a 100,000 different teams:
 
 ```python
 from numpy import random
@@ -427,8 +451,8 @@ def generate_goals():
 file_path = "J_resultlarge.csv"
 
 
-result = [[0] * 6 for _ in range(1000)]
-for i in range(0,1000):
+result = [[0] * 6 for _ in range(100000)]
+for i in range(0,100000):
     result[i][0] = "Team " + f"{i}"
     result[i][1:4] = generate_wdl()
     result[i][4:6] = generate_goals()
@@ -474,8 +498,17 @@ Running the two one after another:
 
 <p align='center'> <img class='noshade' src='./assets/difference.png' width=75%> </p>
 
-Yes, heapsort was almost an entire **order of magnitude** faster than selection sort. And this is only for a dataset $32\mathrm{B} * 1000 = 32\mathrm{KB}$ large. Real databases are much, much larger—a typical database containing user data of a medium-sized website would range between a few gigabytes to tens of gigabytes. Using an inefficient data structure that "just works" is **not** an option when we're working with files this large.
+Yes, heapsort was more than two entire **order of magnitudes** faster than selection sort. And this is only for a dataset $32\mathrm{B} * 100000 = 3.2\mathrm{MB}$ in size. Real databases are much, much larger—a typical database containing user data of a medium-sized website would range between a few gigabytes to tens of gigabytes. Using an inefficient data structure or sorting algorithm that "just works" is **not** an option when we're working with files this large.
 
+
+## 5. Conclusion and further reading
+
+This assignment provided an exercise of data parsing, processing and storage, drawing from the skills learned from all previous classes. From the comparison of J_score1.c and J_score2.c, an importance of data structure and algorithm efficiency is emphasized. Further reading and resources are listed below.
+
+1. [Heap sort algorithm | Programiz](https://www.programiz.com/dsa/heap-sort)
+2. [Big O notation | Wikipedia](https://www.wikiwand.com/en/Big_O_notation)
+3. [Estimating database size requirements | IBM](https://www.ibm.com/docs/zh-tw/tsm/7.1.7?topic=requirements-hp-ux-maximum-number-files)
+4. [Why use arrays of pointers | University of Hawaii](https://ee.hawaii.edu/~tep/EE160/Book/chap9/section2.1.4.html#:~:text=The%20advantage%20of%20a%20pointer,without%20moving%20the%20data%20items.)
 
 
 [comment]: <> (Below is CSS code for the output HTML and pdf files. Don't touch them unless you know what you're doing.)
