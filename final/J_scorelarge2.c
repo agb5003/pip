@@ -51,7 +51,7 @@ int main(void)
     
     /* Open reading file */
     /* Open writing file */
-    fout = fopen("J_scorelarge.txt","w"); // open output file
+    fout = fopen("J_scorelarge2.txt","w"); // open output file
     
     
     /* （2）Calculating score */

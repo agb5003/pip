@@ -3,7 +3,7 @@ Maximilian Fernaldy - C2TB1702
 
 <br>
 
-The objective of the final assignment is to display a ranked results sheet of the 2023 J-league season. We are provided with a csv (comma-separated values) file detailing the result of each team, and we are tasked to add two additional statistics, rank the teams based on their results, and display the ranked order along with the statistics in a .txt file. This is an exercise in database construction, manipulation and display, and a little glimpse into Data Structures and Algorithm, too, namely in the optional tasks.
+The objective of the final assignment is to display a ranked results sheet of the 2023 J-league season. A csv (comma-separated values) file is provided, detailing the result of each team, and we are tasked to add two additional statistics, rank the teams based on their results, and display the ranked order along with the statistics in a .txt file. This is an exercise in database construction, manipulation and display, and a little glimpse into Data Structures and Algorithm, too, namely in the optional tasks.
 
 Mostly, the flow of execution in both J_score1.c and J_score2.c is the same:
 
@@ -17,7 +17,7 @@ However, the methods that the two programs use to execute two of these tasks are
 
 ## 1. Common operations between J_score1.c and J_score2.c
 
-For tasks 1 to 3, J_score1.c and J_score2.c performs identically. First, we read the data from J_result2023.csv using read_data. Originally, `read_data()` takes the file pointer from the main function and writes the data to a table also declared in the main function. At first I used this approach, but this makes modifying the csv file difficult. If an entry is added to the csv file, the program breaks because a macro definition is used to define the number of teams in the file (`#define TEAM_NUM 18`), and this macro definition is used to define the size of `table[]`. In my opinion, the number of teams should be determined by the reading function `read_data()`, then memory allocation is done dynamically according to how many teams there are. This means the program can be used with any csv file as long as the format is correct, regardless of the number of teams in the file.
+For tasks 1 to 3, J_score1.c and J_score2.c performs identically. First, we read the data from J_result2023.csv using `read_data`. Originally, `read_data()` takes the file pointer from the main function and writes the data to a table also declared in the main function. At first I used this approach, but this makes modifying the csv file difficult. If an entry is added to the csv file, the program breaks because a macro definition is used to define the number of teams in the file (`#define TEAM_NUM 18`), and this macro definition is used to define the size of `table[]`. In my opinion, the number of teams should be determined by the reading function `read_data()`, then memory allocation is done dynamically according to how many teams there are. This means the program can be used with any csv file as long as the format is correct, regardless of the number of teams in the file.
 
 ### a). Counting the number of teams in the file
 
@@ -36,7 +36,7 @@ int get_number_of_teams(FILE *fin) {
 }
 ```
 
-This function simply loops and increments `number_of_teams` until `fgets()` returns `NULL`, which means there are no more non-empty lines in the file. Then at the end of the loop it returns `number_of_teams`.
+This function simply takes the file pointer to access the csv file, then loops and increments `number_of_teams`, reading lines with `fgets()` until it returns `NULL`, which means there are no more non-empty lines in the file. Then at the end of the loop it returns `number_of_teams`.
 
 ### b). Reading and storing data
 
@@ -92,11 +92,11 @@ It might feel bulky to move the entire table from the `read_data()` function to 
 
 ### c). Assigning points and calculating goal difference for each team
 
-If we imagine the array of structs as a table (conveniently, the array is literally named `table[]`), then the rows represent different teams, and the columns represent the members of the struct. Then we can visualize this operation as the function being passed a single row of the table and writing the results of the calculation into two columns.
+If we imagine the array of structs as a table (conveniently, the array is literally named `table[]`), then the rows represent different teams, and the columns represent the members of the struct. Then we can visualize this operation as the function being passed a single row of the table and writing the results of the calculation into two columns of that row.
 
 <p align='center'> <img src='./assets/calc_score_annotated.png' width=75%> </p>
 
-The fields colored in yellow are already given to us, but we still need to fill in the points and goal difference for each team in our imaginary table—the fields in red. This is done by passing the pointer to each team's data into a function that does the calculation and writes the result back into the correct fields. This pointer is declared as `SC *team`: a pointer to an SC-type variable. Since what we have is a pointer to a struct, we can use the arrow operator to access and write to the members:
+The fields colored in yellow are already given to us, but we still need to fill in the points and goal difference for each team in our imaginary table—the fields in red. This is done by passing the pointer to each team's data into a function that does the calculation and writes the result back into the correct fields. This pointer is declared as `SC *team`: a pointer to an SC-type variable. Since what we have is a pointer to a struct, we can use the arrow operator in the function to access and write to the members:
 
 ```C
 void calc_score(SC *team)
@@ -108,7 +108,7 @@ void calc_score(SC *team)
 }
 ```
 
-This is done for every team by iterating through all of them in the main function and passing the correct pointer for each one.
+This is done for every team by iterating through all of them in the main function and passing the correct pointer for each one with `&table[i]`.
 
 ```C
 /* （2）Calculating score */
@@ -123,7 +123,7 @@ With the points and goal difference calculations done, we can move on to ranking
 
 ### a). What is selection sort?
 
-Selection sort is a simple sorting algorithm that works by going through the entire unsorted portion, finding the largest or smallest element, then "moving" it from the unsorted portion to the sorted portion by swapping it with the first element in the unsorted portion. The first iteration compares the first element with all other elements $ (n-1) $, the second with $ (n-2) $ elements, and so on, until the second last element is compared only once with the last unsorted element. Each iteration, the unsorted portion decreases by 1, so the total number of required comparisons is:
+Selection sort is a simple sorting algorithm that works by going through the entire unsorted portion, finding the largest or smallest element, then "moving" it from the unsorted portion to the sorted portion by swapping it with the first element in the unsorted portion (effectively considering that element sorted after the swap). The first iteration compares the first element with all other elements $ (n-1) $, the second with $ (n-2) $ elements, and so on, until the second last element is compared only once with the last unsorted element. Each iteration, the unsorted portion decreases by 1, so the total number of required comparisons is:
 
 $$ (n-1) + (n-2) + \ldots + 2 + 1 = \frac{n(n-1)}{2} $$
 
@@ -131,7 +131,7 @@ Since we drop constants and only take the largest order for big O notation, the 
 
 ### b). Implementing selection sort in J_score1.c
 
-Selection sort is very simple to implement. We simply have two `for` loops, one to iterate from the first element to the second last as the reference elements, and the second nested inside the first one to iterate from the element *after* the reference element to the very last element in the array, as the compared elements. This is where the time complexity $ O(n^2) $ comes from: there are two loops each iterating through (basically) the entire array.
+Selection sort is very simple to implement. We simply have two `for` loops, one to iterate from the first element to the second last as the **reference** elements, and the second nested inside the first one to iterate from the element *after* the reference element to the very last element in the array, as the **compared** elements. This is where the time complexity $ O(n^2) $ comes from: there are two loops each having the possibility to loop through (basically) the entire array.
 
 ```C
 void rank_score(SC table[], int number_of_teams)
@@ -171,7 +171,7 @@ if (table[j].score > table[highest_rank_index].score) {
 }
 ```
 
-If a team's score is simply higher than the previously highest score, the highest rank index is reassigned. Then if a tie is encountered, the ladder checks if the compared team's *point difference* is larger. If it's still a tie, the ladder checks if the compared team has more goals scored than the previous highest. If even the goals scored is a tie, the program leaves it alone, as it is not in the specifications of the assignment.
+If a team's score is simply higher than the previously highest score, the highest rank index is reassigned. Then if a score tie is encountered, the ladder checks if the compared team's *point difference* is larger. If it's still a tie, the ladder checks if the compared team has more goals scored than the previous highest. If even the goals scored are tied, the program leaves it alone, as it is not in the specifications of the assignment.
 
 Once all the comparisons are done, if a new highest rank is found, we swap the positions of the two teams in the array with `swap_SC()`:
 
@@ -185,7 +185,7 @@ void swap_SC(SC *team1, SC *team2)
 }
 ```
 
-We can already get a sense of how bulky this program feels: it takes the pointer to two teams, copies the **entire struct** to a temporary variable `temp`, copies the whole of `team2` to `team1`, then copies the whole of `temp` to `team2` again. Now, `team_score` is a relatively small struct of 1 `char[20]` and 7 `int`'s, so its size is probably around 32 bytes with padding. But imagine using this method for moving structs that are much larger. We can see how efficient data structures and algorithms are so important when moving actual real world data.
+We can already get a sense of how bulky this program feels: it takes the pointer to two teams, copies the **entire struct** to a temporary variable `temp`, copies the whole of `team2` to `team1`, then copies the whole of `temp` to `team2` again. Now, `team_score` is a relatively small struct of 1 `char[20]` and 7 `int`'s, so its size is probably around 32 bytes (because the string is stored through a pointer of 4 bytes). But imagine using this method for moving structs that are much larger. We can see how efficient data structures and algorithms are so important when moving actual real world data.
 
 ### c). Displaying the ranked data to a .txt file for J_score1.c
 
@@ -227,7 +227,6 @@ Finally, we pass in the values of each member of the `i`-th team as the last arg
 
 We can see that teams are sorted by their points, and teams with tied points are sorted by their goal difference.
 
-
 ## 3. J_score2.c
 
 Now let's take a look at another approach: **heapsort.** Despite being relatively simple in concept, heapsort is widely used in enterprise, production environments for its performance, efficiency and consistently low memory usage. We need to first understand what a *heap* is, before we can go into heapsort.
@@ -252,18 +251,34 @@ When classified by rule, there are two kinds of heaps: the *max* heap and the *m
 
 ### b). Building a heap
 
-Building min and max heaps is done by repeatedly *heapify*ing the binary tree. Heapify is in principle, a recursive function. For this explanation, let's say we want to make a min heap. To do this, we iterate from the last non-leaf node (index $\frac{n}{2}-1$), and decrement the iterator by 1 until it reaches 0, inclusive. We pass the iterator as the index of the node that heapify should access. Say we have a tree of 7 elements, then we start from $i = \frac{7}{2} -1 = 2$, call heapify on that node, then heapify $i=1$, heapify $0$, and by the end we should have a min heap.
+Building min and max heaps is done by repeatedly *heapify*ing the binary tree. For this explanation, let's say we want to make a min heap. To do this, we iterate from the last non-leaf node, and decrement the iterator by 1 until it reaches 0, inclusive. In each iteration, we pass the iterator as the index of the node that heapify should access. 
 
-First, it takes the root of a tree, compares it to both of its child nodes, and if one of the child nodes is smaller, heapify swaps that child node with the root, making the root now the smallest between the three nodes. Then, heapify recursively calls itself, but now passing the index of the node that used to contain the smallest number. The subtree would then be heapified too, with the smallest element as the parent.
+Say we have a tree of 7 elements. If we denote the size of the tree as $n = 7$, and the last non-leaf node as $i$, then
+
+$$
+    \mathrm{If\;n\;is\;odd,\;last\;node\;is\;a\;right\;child\;node.} \\
+    \begin{align*}
+        \implies n &= 2i+2 \\
+                    n - 2 &= 2i \\
+                    i &= \dfrac{n-2}{2} \\
+                    i & = \dfrac{n}{2} - 1 \\
+                    \mathrm{for\;the\;case\;} n = 7, \\
+                     i &= \dfrac{7}{2} - 1 \\
+                     i &= 2 
+    \end{align*} \\
+$$
+
+Which means we start at $i = 2$ as the last non-leaf node, call heapify with $i=2$, decrement $i$ to $1$, call heapify with $i=1$, decrement again to $i=0$, call heapify with $i=0$, and by the end of this we should have a min heap.
+
+#### heapify
+
+Heapify is in principle, a recursive function. First, it takes the parent node of a subtree, compares it to both of its child nodes, and if one of the child nodes is smaller, heapify swaps that child node with the parent, making the parent now the smallest between the three nodes. Then, heapify recursively calls itself, but now passing the index of the child node that used to contain the smallest number (before the swap). We can then imagine this operation as heapify "moving" to a new subtree, one with the child node as the new parent node. This subtree would then be heapified too, with the smallest element in it as the new parent node.
 
 <p align='center'> <img src='./assets/heapify.jpeg' width=75%> </p>
 
 <p align='center'> click <a href='https://imgur.com/a/GTZ2z2F'>here</a> to see full image. </p>
 
 If we see what the array looks like after the min heap is built, we can see that it's *somewhat* sorted, but not completely. We have the smallest element as the first one, and there seems to be a trend of increasing numbers, but some elements are still out of order.
-
-|1|2|5|4|8|6|7|
-|-|-|-|-|-|-|-|
 
 ### c). heapsort
 
@@ -275,11 +290,17 @@ Finally, we can talk about heapsort. The following points outline the principle 
 4. Move new root from the heap to the sorted portion by swapping it with the last element in the heap
 5. Repeat until the heap is gone and everything is sorted
 
-Perhaps counterintuitively, sorting elements from smallest to largest is done by utilizing the *max* heap, and sorting from largest to smallest is done by utilizing the *min* heap. This is because we put the sorted portion *after* the heap in the array, and when elements are added to the sorted portion, it's added in front of it, which means we're adding elements from the back to front. Take the following example of sorting from smallest to largest:
+Perhaps counterintuitively, sorting elements from smallest to largest is done by utilizing the *max* heap, and sorting from largest to smallest is done by building *min* heaps. This is because we put the sorted portion *after* the heap in the array, and when elements are added to the sorted portion, it's added in front of it, which means we're adding elements from the back to front. Take the following example of sorting from smallest to largest:
 
 <p align='center'> <img src='./assets/heapsort.jpeg' width=75%> </p>
 
 Instead of the heap being an entirely separate array, it's just a representation of the unsorted portion of our array. We sort the array by repeatedly making a max heap, taking the root out and putting it in front of the sorted portion, and repeat until there is no unsorted portion anymore; there is no heap anymore. Then we know that everything inside the array is sorted.
+
+Let's take a look at another example, this time building min heaps to sort largest to smallest:
+
+<p align='center'> <img src='./assets/buildheap1.jpg' width=75%> </p>
+<p align='center'> <img src='./assets/buildheap2.jpg' width=75%> </p>
+<p align='center'> <img src='./assets/buildheap3.jpg' width=75%> </p>
 
 ### d). Applying heapsort to J_score2.c
 
@@ -376,7 +397,7 @@ void heapify(SC *rank_array[], int n, int i) {
 
 ### e). Pointers of pointers
 
-Remember that to swap things in an array, we need their memory address. That's exactly what we're doing with `swap_pointers()`. We pass the memory address of `rank_array[0]` and `rank_array[n]`, which are pointers. This means we're passing *pointers to pointers*. Although it may seem confusing, we don't actually have to worry since pointers are just plain variables, and exchanging their values are as simple as exchanging the values of any other variable: using the dereference operator (*).
+Remember that to swap things in an array, we need their memory addresses. That's exactly what we're doing with `swap_pointers()`. We pass the memory addresses of `rank_array[0]` and `rank_array[n]`, which are pointers. This means we're passing *pointers to pointers*. Although it may seem confusing, we don't actually have to worry since pointers are just plain variables, and exchanging their values are as simple as exchanging the values of any other variable: using the dereference operator (*).
 
 ```C
 void swap_pointers(SC **pointerA, SC **pointerB) {
@@ -387,11 +408,11 @@ void swap_pointers(SC **pointerA, SC **pointerB) {
 }
 ```
 
-For data types that are not numbers, we have no choice but to use a temp variable to store temporary data for swapping. Since a pointer is typically only 4 bytes, we don't really have to worry about performance here.
+For data types that are not numbers, we have no choice but to use a `temp` variable to store temporary data for swapping. Since a pointer is typically only 4 bytes, we don't really have to worry about performance here.
 
 ### f). Printing the output of J_score2.c
 
-Printing the output of J_score2.c is a bit different from J_score1.c, because what we have sorted is the array of pointers, not the table itself. The table stays as it was, ordered alphabetically. In order to display the ranked data in order, we need to use the array of pointers to access the table. To do this, we use the arrow operator to access the struct that is pointed to by `rank_array[i]`, then access its respective members. Everything else, including the formatting, stays the same.
+Printing the output of J_score2.c is a bit different from J_score1.c, because what we have sorted is the array of pointers, not the table itself. The table stays as it was, ordered alphabetically. In order to display the ranked data in order, we need to use the array of pointers to access the table. To do this, we use the arrow operator to access the struct members of the variable that is pointed to by `rank_array[i]`. Everything else, including the formatting, stays the same.
 
 ```C
 void write_data(FILE *fout, SC *rank_array[], int number_of_teams)
@@ -498,7 +519,7 @@ Running the two one after another:
 
 <p align='center'> <img class='noshade' src='./assets/difference.png' width=75%> </p>
 
-Yes, heapsort was more than two entire **order of magnitudes** faster than selection sort. And this is only for a dataset $32\mathrm{B} * 100000 = 3.2\mathrm{MB}$ in size. Real databases are much, much larger—a typical database containing user data of a medium-sized website would range between a few gigabytes to tens of gigabytes. Using an inefficient data structure or sorting algorithm that "just works" is **not** an option when we're working with files this large.
+Yes, heapsort was more than two entire **order of magnitudes** faster than selection sort. And this is only for a dataset $32\mathrm{B} * 100000 = 3.2\mathrm{MB}$ in size. Real databases are much, much larger—for instance, a typical database containing user data of a medium-sized website would range between a few gigabytes to tens of gigabytes. Using an inefficient data structure or sorting algorithm that "just works" is **not** an option when we're working with files this large.
 
 
 ## 5. Conclusion and further reading
@@ -508,7 +529,7 @@ This assignment provided an exercise of data parsing, processing and storage, dr
 1. [Heap sort algorithm | Programiz](https://www.programiz.com/dsa/heap-sort)
 2. [Big O notation | Wikipedia](https://www.wikiwand.com/en/Big_O_notation)
 3. [Estimating database size requirements | IBM](https://www.ibm.com/docs/zh-tw/tsm/7.1.7?topic=requirements-hp-ux-maximum-number-files)
-4. [Why use arrays of pointers | University of Hawaii](https://ee.hawaii.edu/~tep/EE160/Book/chap9/section2.1.4.html#:~:text=The%20advantage%20of%20a%20pointer,without%20moving%20the%20data%20items.)
+4. [Sorting with an array of pointers | University of Hawaii](https://ee.hawaii.edu/~tep/EE160/Book/chap9/section2.1.4.html#:~:text=The%20advantage%20of%20a%20pointer,without%20moving%20the%20data%20items.)
 
 
 [comment]: <> (Below is CSS code for the output HTML and pdf files. Don't touch them unless you know what you're doing.)
