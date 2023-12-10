@@ -28,7 +28,7 @@ int get_number_of_teams(FILE *fin) {
     // This function gets the selected file and returns how many lines are in the file.
     char buffer[DATA_LEN];
     int number_of_teams = 0;
-    while (fgets(buffer, sizeof(buffer), fin) !=NULL) {
+    while (fgets(buffer, sizeof(buffer), fin) != NULL) {
         number_of_teams++;
     }
     fseek(fin, 0, SEEK_SET);  // return fgets to the first line
@@ -298,9 +298,11 @@ Instead of the heap being an entirely separate array, it's just a representation
 
 Let's take a look at another example, this time building min heaps to sort largest to smallest:
 
-<p align='center'> <img src='./assets/buildheap1.jpg' width=75%> </p>
-<p align='center'> <img src='./assets/buildheap2.jpg' width=75%> </p>
-<p align='center'> <img src='./assets/buildheap3.jpg' width=75%> </p>
+<p align='center'> <img height=700px src='./assets/buildheap1.jpg'> </p>
+<p align='center'> <img height=700px src='./assets/buildheap2.jpg'> </p>
+<p align='center'> <img width = 75% src='./assets/buildheap3.jpg'> </p>
+
+<p align='center'> click <a href='https://imgur.com/a/2L8orvX'>here</a> to see full images. </p>
 
 ### d). Applying heapsort to J_score2.c
 
@@ -352,15 +354,20 @@ void heapify(SC *rank_array[], int n, int i) {
         // If left child node should rank lower
         if (rank_array[left]->score < rank_array[lowest]->score)
         {
+            // If score is lower
             lowest = left;
         } else if (rank_array[left]->score == rank_array[lowest]->score)
         {
+            // If score is tied
             if (rank_array[left]->point_diff < rank_array[lowest]->point_diff)
             {
+                // If point difference is lower
                 lowest = left;
             } else if (rank_array[left]->point_diff == rank_array[lowest]->point_diff)
             {
+                // If point difference is tied
                 if (rank_array[left]->GF < rank_array[lowest]->GF) {
+                    // If less goals were scored
                     lowest = left;
                 }
             }
@@ -370,15 +377,20 @@ void heapify(SC *rank_array[], int n, int i) {
         // If right child node should rank lower
         if (rank_array[right]->score < rank_array[lowest]->score)
         {
+            // If score is lower
             lowest = right;
         } else if (rank_array[right]->score == rank_array[lowest]->score)
         {
+            // If score is tied
             if (rank_array[right]->point_diff < rank_array[lowest]->point_diff)
             {
+                // If point difference is lower
                 lowest = right;
             } else if (rank_array[right]->point_diff == rank_array[lowest]->point_diff)
             {
+                // If point difference is tied
                 if (rank_array[right]->GF < rank_array[lowest]->GF) {
+                    // If less goals were scored
                     lowest = right;
                 }
             }
@@ -393,6 +405,8 @@ void heapify(SC *rank_array[], int n, int i) {
     }
 }
 ```
+
+Naturally, this `if-else` ladder is identical to the one we used in J_score1.c.
 
 
 ### e). Pointers of pointers
@@ -437,8 +451,6 @@ void write_data(FILE *fout, SC *rank_array[], int number_of_teams)
 Compiling and running the program, we get an identical result as the one we get from J_score1.c:
 
 <p align='center'> <img class='noshade' src='./assets/output2.png' width=75%> </p>
-
-
 
 
 ## 4. Testing large datasets

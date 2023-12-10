@@ -61,11 +61,7 @@ int main(void)
     /* （3）Ranking based on score */
     rank_score(table, rank_array, number_of_teams);
     
-    // // Display results
-    // for (int i = 0; i < number_of_teams; i++) {
-    //     printf("%25s %4d %4d %4d %4d %4d %4d %4d\n", rank_array[i]->name, rank_array[i]->win, rank_array[i]->draw, rank_array[i]->loss, rank_array[i]->GF, rank_array[i]->GA, rank_array[i]->score, rank_array[i]->point_diff);
-    // }
-    
+
     /* （4) Writing ranking file in order*/
     write_data(fout, rank_array, number_of_teams);
 
@@ -96,7 +92,13 @@ SC *read_data(const char *file_path, int *number_of_teams)
     table = malloc(sizeof(SC) * *number_of_teams);
     char buffer[DATA_LEN];
     while (fgets(buffer, sizeof(buffer), fin) != NULL) {
-        sscanf(buffer, "%[^,],%d,%d,%d,%d,%d", table[i].name, &table[i].win, &table[i].draw, &table[i].loss, &table[i].GF, &table[i].GA);
+        sscanf(buffer, "%[^,],%d,%d,%d,%d,%d",
+                table[i].name,
+                &table[i].win,
+                &table[i].draw,
+                &table[i].loss,
+                &table[i].GF,
+                &table[i].GA);
         i++;
     }
 
@@ -109,7 +111,7 @@ int get_number_of_teams(FILE *fin) {
     // This function gets the selected file and returns how many lines are in the file.
     char buffer[DATA_LEN];
     int number_of_teams = 0;
-    while (fgets(buffer, sizeof(buffer), fin) !=NULL) {
+    while (fgets(buffer, sizeof(buffer), fin) != NULL) {
         number_of_teams++;
     }
     fseek(fin, 0, SEEK_SET);  // return fgets to the first line
@@ -163,15 +165,20 @@ void heapify(SC *rank_array[], int n, int i) {
         // If left child node should rank lower
         if (rank_array[left]->score < rank_array[lowest]->score)
         {
+            // If score is lower
             lowest = left;
         } else if (rank_array[left]->score == rank_array[lowest]->score)
         {
+            // If score is tied
             if (rank_array[left]->point_diff < rank_array[lowest]->point_diff)
             {
+                // If point difference is lower
                 lowest = left;
             } else if (rank_array[left]->point_diff == rank_array[lowest]->point_diff)
             {
+                // If point difference is tied
                 if (rank_array[left]->GF < rank_array[lowest]->GF) {
+                    // If less goals were scored
                     lowest = left;
                 }
             }
@@ -181,15 +188,20 @@ void heapify(SC *rank_array[], int n, int i) {
         // If right child node should rank lower
         if (rank_array[right]->score < rank_array[lowest]->score)
         {
+            // If score is lower
             lowest = right;
         } else if (rank_array[right]->score == rank_array[lowest]->score)
         {
+            // If score is tied
             if (rank_array[right]->point_diff < rank_array[lowest]->point_diff)
             {
+                // If point difference is lower
                 lowest = right;
             } else if (rank_array[right]->point_diff == rank_array[lowest]->point_diff)
             {
+                // If point difference is tied
                 if (rank_array[right]->GF < rank_array[lowest]->GF) {
+                    // If less goals were scored
                     lowest = right;
                 }
             }

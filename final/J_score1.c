@@ -59,7 +59,7 @@ int main(void)
     /* （3）Ranking based on score */
     rank_score(table, number_of_teams);
     
-    /*（4) writing ranking file in order*/
+    /* （4) Writing ranking file in order*/
     write_data(fout, table, number_of_teams);
 
     /* closing process */
