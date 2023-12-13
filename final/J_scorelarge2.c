@@ -33,7 +33,6 @@ typedef struct team_score SC; /*struct team_score is aliased as "SC" */
 SC *read_data(const char *file_path, int *number_of_teams);
 void calc_score(SC *team);
 void rank_score(SC table[], SC *rank_array[], int number_of_teams);
-void heapify(SC *rank_array[], int n, int i);
 void write_data(FILE *fout, SC *rank_array[], int number_of_teams);
 void swap_pointers(SC **pointerA, SC **pointerB);
 int get_number_of_teams(FILE *fin);
@@ -62,11 +61,7 @@ int main(void)
     /* （3）Ranking based on score */
     rank_score(table, rank_array, number_of_teams);
     
-    // // Display results
-    // for (int i = 0; i < number_of_teams; i++) {
-    //     printf("%25s %4d %4d %4d %4d %4d %4d %4d\n", rank_array[i]->name, rank_array[i]->win, rank_array[i]->draw, rank_array[i]->loss, rank_array[i]->GF, rank_array[i]->GA, rank_array[i]->score, rank_array[i]->point_diff);
-    // }
-    
+
     /* （4) Writing ranking file in order*/
     write_data(fout, rank_array, number_of_teams);
 
@@ -97,7 +92,13 @@ SC *read_data(const char *file_path, int *number_of_teams)
     table = malloc(sizeof(SC) * *number_of_teams);
     char buffer[DATA_LEN];
     while (fgets(buffer, sizeof(buffer), fin) != NULL) {
-        sscanf(buffer, "%[^,],%d,%d,%d,%d,%d", table[i].name, &table[i].win, &table[i].draw, &table[i].loss, &table[i].GF, &table[i].GA);
+        sscanf(buffer, "%[^,],%d,%d,%d,%d,%d",
+                table[i].name,
+                &table[i].win,
+                &table[i].draw,
+                &table[i].loss,
+                &table[i].GF,
+                &table[i].GA);
         i++;
     }
 
@@ -110,7 +111,7 @@ int get_number_of_teams(FILE *fin) {
     // This function gets the selected file and returns how many lines are in the file.
     char buffer[DATA_LEN];
     int number_of_teams = 0;
-    while (fgets(buffer, sizeof(buffer), fin) !=NULL) {
+    while (fgets(buffer, sizeof(buffer), fin) != NULL) {
         number_of_teams++;
     }
     fseek(fin, 0, SEEK_SET);  // return fgets to the first line
@@ -127,98 +128,51 @@ void calc_score(SC *team)
 
 void rank_score(SC table[], SC *rank_array[], int number_of_teams)
 {
-    clock_t start, end;
-    double elapsed;
-    start = clock();
     // Create array of pointers
     for (int i = 0; i < number_of_teams; i++) {
         rank_array[i] = &table[i];
     }
+    clock_t start, end;
+    double elapsed;
+    start = clock();
 
-    // Build min heap
-    for (int i = number_of_teams/2 - 1; i >= 0; i--) {
-        heapify(rank_array, number_of_teams, i);
-    }
-    /*
-    At this point in the code, we have built a min heap, which means
-    the smallest element is at the top of the heap, and no child node is
-    smaller than the parent. However, it's not fully sorted yet.
-    */
-
-    // Heap sort
-    for (int n = number_of_teams - 1; n >= 0; n--) {
-        /*
-        Remove root node from heap by swapping with last element
-        Then, heapify at root to get the smallest element at the root again
-        Repeat until the heap is gone.
-        */
-        swap_pointers(&rank_array[0], &rank_array[n]);
-
-        heapify(rank_array, n, 0);
+    // Use selection sort
+    for (int i = 0; i < number_of_teams-1; i++) {
+        int highest_rank_index = i;
+        for (int j = i+1; j < number_of_teams; j++) {
+            if (rank_array[j]->score > rank_array[highest_rank_index]->score) {
+                highest_rank_index = j;
+            } else if (rank_array[j]->score == rank_array[highest_rank_index]->score) {
+                // Case if a score tie is encountered
+                if (rank_array[j]->point_diff > rank_array[highest_rank_index]->point_diff) {
+                    // If compared team has larger point difference
+                    highest_rank_index = j;
+                } else if (rank_array[j]->point_diff == rank_array[highest_rank_index]->point_diff) {
+                    // If the point difference is still the same
+                    if (rank_array[j]->GF > rank_array[highest_rank_index]->GF) {
+                        // If the compared team has more goals scored.
+                        highest_rank_index = j;
+                    }
+                }
+            }
+        }
+        if (highest_rank_index != i) {
+            swap_pointers(&rank_array[i], &rank_array[highest_rank_index]);
+        }
     }
     end = clock();
     elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("[DEBUG] %lf seconds elapsed\n",elapsed);
 }
 
-void heapify(SC *rank_array[], int n, int i) {
-    int lowest = i;  // Initialize lowest as parent node
-    int left = 2*i+1;  // Index left child node
-    int right = 2*i+2;  // Index right child node
-    
-    if (left < n) {
-        // If left child node should rank lower
-        if (rank_array[left]->score < rank_array[lowest]->score)
-        {
-            lowest = left;
-        } else if (rank_array[left]->score == rank_array[lowest]->score)
-        {
-            if (rank_array[left]->point_diff < rank_array[lowest]->point_diff)
-            {
-                lowest = left;
-            } else if (rank_array[left]->point_diff == rank_array[lowest]->point_diff)
-            {
-                if (rank_array[left]->GF < rank_array[lowest]->GF) {
-                    lowest = left;
-                }
-            }
-        }
-    }
-    if (right < n) {
-        // If right child node should rank lower
-        if (rank_array[right]->score < rank_array[lowest]->score)
-        {
-            lowest = right;
-        } else if (rank_array[right]->score == rank_array[lowest]->score)
-        {
-            if (rank_array[right]->point_diff < rank_array[lowest]->point_diff)
-            {
-                lowest = right;
-            } else if (rank_array[right]->point_diff == rank_array[lowest]->point_diff)
-            {
-                if (rank_array[right]->GF < rank_array[lowest]->GF) {
-                    lowest = right;
-                }
-            }
-        }
-    }
-    
-    // Swap if root is not the largest element, then continue heapify
-    if (lowest != i) {
-        // Swapping pointers around
-        swap_pointers(&rank_array[lowest], &rank_array[i]);
-        heapify(rank_array, n, lowest);
-    }
-}
-
-void swap_pointers(SC **pointerA, SC **pointerB) {
+void swap_pointers(SC **pointerA, SC **pointerB)
+{
     // this function swaps pointers. To do that, we pass in the pointer to the pointer.
     SC *temp = *pointerA;
     *pointerA = *pointerB;
     *pointerB = temp;
 }
 
-/* Writing ranking file */
 void write_data(FILE *fout, SC *rank_array[], int number_of_teams)
 {
     fprintf(fout, "| Rank | Team Name            | Wins | Draws | Losses | Goals Scored | Goals Conceded | Points | Goal Difference |\n");

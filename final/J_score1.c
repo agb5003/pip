@@ -48,7 +48,7 @@ int main(void)
     
     /* Open reading file */
     /* Open writing file */
-    fout = fopen("J_score.txt","w"); // open output file
+    fout = fopen("J_score1.txt","w"); // open output file
     
     
     /* （2）Calculating score */
@@ -87,6 +87,8 @@ SC *read_data(const char *file_path, int *number_of_teams)
     int i = 0;
     *number_of_teams = get_number_of_teams(fin);
     table = malloc(sizeof(SC) * *number_of_teams);
+
+    // Store data in array
     char buffer[DATA_LEN];
     while (fgets(buffer, sizeof(buffer), fin) != NULL) {
         sscanf(buffer, "%[^,],%d,%d,%d,%d,%d",
@@ -99,8 +101,8 @@ SC *read_data(const char *file_path, int *number_of_teams)
         i++;
     }
 
+    // Close file and return storage table
     fclose(fin);
-
     return table;
 }
 

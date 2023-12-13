@@ -1,0 +1,20 @@
+| Rank | Team Name            | Wins | Draws | Losses | Goals Scored | Goals Conceded | Points | Goal Difference |
+|------|----------------------|------|-------|--------|--------------|----------------|--------|-----------------|
+| 1    | Vissel Kobe          |   20 |     8 |      5 |           59 |             29 |     68 |              30 |
+| 2    | Yokohama F. Marinos  |   19 |     7 |      7 |           62 |             37 |     64 |              25 |
+| 3    | Sanfrecce Hiroshima  |   16 |     7 |     10 |           41 |             28 |     55 |              13 |
+| 4    | Urawa Red Diamonds   |   14 |    12 |      7 |           40 |             27 |     54 |              13 |
+| 5    | Nagoya Grampus       |   14 |     9 |     10 |           40 |             35 |     51 |               5 |
+| 6    | Avispa Fukuoka       |   15 |     6 |     12 |           37 |             42 |     51 |              -5 |
+| 7    | Kashima Antlers      |   13 |    10 |     10 |           41 |             33 |     49 |               8 |
+| 8    | Cerezo Osaka         |   15 |     4 |     14 |           39 |             33 |     49 |               6 |
+| 9    | Kawasaki Frontale    |   13 |     8 |     12 |           50 |             45 |     47 |               5 |
+| 10   | Albirex Niigata      |   10 |    12 |     11 |           35 |             40 |     42 |              -5 |
+| 11   | Consadole Sapporo    |   10 |    10 |     13 |           56 |             59 |     40 |              -3 |
+| 12   | FC Tokyo             |   11 |     7 |     15 |           41 |             46 |     40 |              -5 |
+| 13   | Sagan Tosu           |    9 |    11 |     13 |           43 |             46 |     38 |              -3 |
+| 14   | Kyoto Sanga FC       |   11 |     4 |     18 |           37 |             44 |     37 |              -7 |
+| 15   | Shonan Bellmare      |    8 |    10 |     15 |           40 |             55 |     34 |             -15 |
+| 16   | Gamba Osaka          |    9 |     7 |     17 |           38 |             60 |     34 |             -22 |
+| 17   | Kashiwa Reysol       |    6 |    14 |     13 |           32 |             46 |     32 |             -14 |
+| 18   | Yokohama FC          |    7 |     8 |     18 |           30 |             56 |     29 |             -26 |

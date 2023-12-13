@@ -32,7 +32,6 @@ typedef struct team_score SC; /*struct team_score is aliased as "SC" */
 SC *read_data(const char *file_path, int *number_of_teams);
 void calc_score(SC *team);
 void rank_score(SC table[], SC *rank_array[], int number_of_teams);
-void heapify(SC *rank_array[], int n, int i);
 void write_data(FILE *fout, SC *rank_array[], int number_of_teams);
 void swap_pointers(SC **pointerA, SC **pointerB);
 int get_number_of_teams(FILE *fin);
@@ -90,6 +89,8 @@ SC *read_data(const char *file_path, int *number_of_teams)
     int i = 0;
     *number_of_teams = get_number_of_teams(fin);
     table = malloc(sizeof(SC) * *number_of_teams);
+
+    // Store data in array
     char buffer[DATA_LEN];
     while (fgets(buffer, sizeof(buffer), fin) != NULL) {
         sscanf(buffer, "%[^,],%d,%d,%d,%d,%d",
@@ -102,8 +103,8 @@ SC *read_data(const char *file_path, int *number_of_teams)
         i++;
     }
 
+// Close file and return storage table
     fclose(fin);
-
     return table;
 }
 
@@ -133,86 +134,29 @@ void rank_score(SC table[], SC *rank_array[], int number_of_teams)
         rank_array[i] = &table[i];
     }
 
-    // Build min heap
-    for (int i = number_of_teams/2 - 1; i >= 0; i--) {
-        heapify(rank_array, number_of_teams, i);
-    }
-    /*
-    At this point in the code, we have built a min heap, which means
-    the smallest element is at the top of the heap, and no child node is
-    smaller than the parent. However, it's not fully sorted yet.
-    */
-
-    // Heap sort
-    for (int n = number_of_teams - 1; n >= 0; n--) {
-        /*
-        Remove root node from heap by swapping with last element
-        Then, heapify at root to get the smallest element at the root again
-        Repeat until the heap is gone.
-        */
-        swap_pointers(&rank_array[0], &rank_array[n]);
-
-        heapify(rank_array, n, 0);
-    }
-}
-
-void heapify(SC *rank_array[], int n, int i) {
-    int lowest = i;  // Initialize lowest as parent node
-    int left = 2*i+1;  // Index left child node
-    int right = 2*i+2;  // Index right child node
-    
-    if (left < n) {
-        // If left child node should rank lower
-        if (rank_array[left]->score < rank_array[lowest]->score)
-        {
-            // If score is lower
-            lowest = left;
-        } else if (rank_array[left]->score == rank_array[lowest]->score)
-        {
-            // If score is tied
-            if (rank_array[left]->point_diff < rank_array[lowest]->point_diff)
-            {
-                // If point difference is lower
-                lowest = left;
-            } else if (rank_array[left]->point_diff == rank_array[lowest]->point_diff)
-            {
-                // If point difference is tied
-                if (rank_array[left]->GF < rank_array[lowest]->GF) {
-                    // If less goals were scored
-                    lowest = left;
+    // Use selection sort
+    for (int i = 0; i < number_of_teams-1; i++) {
+        int highest_rank_index = i;
+        for (int j = i+1; j < number_of_teams; j++) {
+            if (rank_array[j]->score > rank_array[highest_rank_index]->score) {
+                highest_rank_index = j;
+            } else if (rank_array[j]->score == rank_array[highest_rank_index]->score) {
+                // Case if a score tie is encountered
+                if (rank_array[j]->point_diff > rank_array[highest_rank_index]->point_diff) {
+                    // If compared team has larger point difference
+                    highest_rank_index = j;
+                } else if (rank_array[j]->point_diff == rank_array[highest_rank_index]->point_diff) {
+                    // If the point difference is still the same
+                    if (rank_array[j]->GF > rank_array[highest_rank_index]->GF) {
+                        // If the compared team has more goals scored.
+                        highest_rank_index = j;
+                    }
                 }
             }
         }
-    }
-    if (right < n) {
-        // If right child node should rank lower
-        if (rank_array[right]->score < rank_array[lowest]->score)
-        {
-            // If score is lower
-            lowest = right;
-        } else if (rank_array[right]->score == rank_array[lowest]->score)
-        {
-            // If score is tied
-            if (rank_array[right]->point_diff < rank_array[lowest]->point_diff)
-            {
-                // If point difference is lower
-                lowest = right;
-            } else if (rank_array[right]->point_diff == rank_array[lowest]->point_diff)
-            {
-                // If point difference is tied
-                if (rank_array[right]->GF < rank_array[lowest]->GF) {
-                    // If less goals were scored
-                    lowest = right;
-                }
-            }
+        if (highest_rank_index != i) {
+            swap_pointers(&rank_array[i], &rank_array[highest_rank_index]);
         }
-    }
-    
-    // Swap if root is not the largest element, then continue heapify
-    if (lowest != i) {
-        // Swapping pointers around
-        swap_pointers(&rank_array[lowest], &rank_array[i]);
-        heapify(rank_array, n, lowest);
     }
 }
 
